@@ -2,3 +2,4 @@ language: objective-c
 osx_image: xcode7.1
 xcode_sdk: iphonesimulator9.1
 xcode_workspace: LogLibrary.xcworkspace
+script: xcodebuild -workspace LogLibrary.xcworkspace -scheme LogExampleTests -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
