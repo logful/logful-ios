@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "EBF7418974AE3FFBF656FC634859D7E10EEC505E",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "EBF7418974AE3FFBF656FC634859D7E10EEC505E" : 0,
+    "7CB96EABFD37EB0DF5420F3B82CE55DF7D7FC281" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "509D4590-2447-4E0C-9FAE-AEBE87F62692",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "EBF7418974AE3FFBF656FC634859D7E10EEC505E" : "logful-ios\/",
+    "7CB96EABFD37EB0DF5420F3B82CE55DF7D7FC281" : "getui-log-ios"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "LogLibrary",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "LogLibrary.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/115.236.68.62:9990\/frontend-mta\/getui-log-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "7CB96EABFD37EB0DF5420F3B82CE55DF7D7FC281"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:logful\/logful-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "EBF7418974AE3FFBF656FC634859D7E10EEC505E"
+    }
+  ]
+}
