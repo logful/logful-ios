@@ -12,6 +12,7 @@
 #import "GTDateTimeUtil.h"
 #import "GTLoggerConstants.h"
 #import "GTSystemConfig.h"
+#import "GTLoggerConstants.h"
 
 @interface GTClientAuthUtil ()
 

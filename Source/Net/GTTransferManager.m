@@ -81,7 +81,7 @@
         return;
     }
 
-    GTTransferManager *manager = [GTTransferManager manager];
+    //GTTransferManager *manager = [GTTransferManager manager];
     // TODO
 }
 

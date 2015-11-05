@@ -13,8 +13,11 @@ Pod::Spec.new do |s|
     :tag => s.version
   }
   s.source_files = "Source/*.{h,m}", "Source/**/*.{h,m}"
-  s.frameworks = "MobileCoreServices", "SystemConfiguration", "UIKit"
-  s.ios.vendored_frameworks = 'Framework/openssl.framework'
   s.libraries = "z", "sqlite3.0"
+  s.pod_target_xcconfig = {
+    'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/Framework'
+  }
+  s.vendored_frameworks = "Framework/openssl.framework"
+  s.frameworks = "MobileCoreServices", "SystemConfiguration", "UIKit"
   s.requires_arc = true
 end
