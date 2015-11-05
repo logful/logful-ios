@@ -1,8 +1,9 @@
 # Logful
 
-Logful remote logging sdk for iOS
-
 [![Build Status](https://travis-ci.org/logful/logful-ios.svg?branch=master)](https://travis-ci.org/logful/logful-ios)
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/logful/logful-ios/blob/master/LICENSE)
+
+Logful remote logging sdk for iOS
 
 ## Features
 
