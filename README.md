@@ -5,7 +5,13 @@
 
 Logful remote logging sdk for iOS
 
-## Features
+## Dependency
+
+```
+pod 'Logful', '~> 0.2.0'
+```
+
+## Usage
 
 ### Initialize logful iOS sdk
 
