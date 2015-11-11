@@ -18,9 +18,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		531F50D91BB0E6D000FBBFCD /* PBXContainerItemProxy */ = {
+		53EF3AB41BF31F50006BEE22 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 531F50D51BB0E6D000FBBFCD /* Logful.xcodeproj */;
+			containerPortal = 53EF3AAE1BF31F50006BEE22 /* Logful.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 531F50C91BB0E6C700FBBFCD;
 			remoteInfo = Logful;
@@ -49,7 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		531F50D51BB0E6D000FBBFCD /* Logful.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Logful.xcodeproj; path = ../Logful/Logful.xcodeproj; sourceTree = "<group>"; };
+		53EF3AAE1BF31F50006BEE22 /* Logful.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Logful.xcodeproj; path = ../Logful.xcodeproj; sourceTree = "<group>"; };
 		53F020D81B71BFE400CBA738 /* LogExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LogExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		53F020DC1B71BFE400CBA738 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		53F020DD1B71BFE400CBA738 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -85,10 +85,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		531F50D61BB0E6D000FBBFCD /* Products */ = {
+		53EF3AAF1BF31F50006BEE22 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				531F50DA1BB0E6D000FBBFCD /* libLogful.a */,
+				53EF3AB51BF31F50006BEE22 /* libLogful.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -96,7 +96,7 @@
 		53F020CF1B71BFE400CBA738 = {
 			isa = PBXGroup;
 			children = (
-				531F50D51BB0E6D000FBBFCD /* Logful.xcodeproj */,
+				53EF3AAE1BF31F50006BEE22 /* Logful.xcodeproj */,
 				53F021011B71C01E00CBA738 /* LogLibrary.xcodeproj */,
 				53F020DA1B71BFE400CBA738 /* LogExample */,
 				53F020F41B71BFE500CBA738 /* LogExampleTests */,
@@ -232,8 +232,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 531F50D61BB0E6D000FBBFCD /* Products */;
-					ProjectRef = 531F50D51BB0E6D000FBBFCD /* Logful.xcodeproj */;
+					ProductGroup = 53EF3AAF1BF31F50006BEE22 /* Products */;
+					ProjectRef = 53EF3AAE1BF31F50006BEE22 /* Logful.xcodeproj */;
 				},
 				{
 					ProductGroup = 53F021021B71C01E00CBA738 /* Products */;
@@ -249,11 +249,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		531F50DA1BB0E6D000FBBFCD /* libLogful.a */ = {
+		53EF3AB51BF31F50006BEE22 /* libLogful.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libLogful.a;
-			remoteRef = 531F50D91BB0E6D000FBBFCD /* PBXContainerItemProxy */;
+			remoteRef = 53EF3AB41BF31F50006BEE22 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		53F021071B71C01E00CBA738 /* LogLibrary.framework */ = {
