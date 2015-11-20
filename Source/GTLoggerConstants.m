@@ -37,7 +37,7 @@ NSString *const DEFAULT_LOGGER_NAME = @"app";
 
 NSString *const DEFAULT_MSG_LAYOUT = @"";
 
-NSString *const API_BASE_URL = @"http://127.0.0.1:9600";
+NSString *const API_BASE_URL = @"http://demo.logful.aoapp.com:9600";
 
 NSString *const CLIENT_AUTH_URI = @"/oauth/token";
 
