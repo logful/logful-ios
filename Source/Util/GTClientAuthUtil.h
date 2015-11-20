@@ -8,23 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol GTClientAuthUtilDelegate <NSObject>
-
-- (void)didAuthorization:(NSString *)token tokenType:(NSString *)tokenType;
-
-@optional
-- (void)didInvalid;
-
-@optional
-- (void)didFailure;
-
-@end
-
 @interface GTClientAuthUtil : NSObject
 
-+ (void)addDelegate:(id<GTClientAuthUtilDelegate>)delegate;
-+ (void)removeDelegate:(id<GTClientAuthUtilDelegate>)delegate;
-+ (void)auth;
-+ (void)clearToken;
++ (BOOL)authenticated;
++ (NSString *)accessToken;
++ (NSString *)tokenType;
+
++ (void)authenticate;
 
 @end

@@ -20,7 +20,7 @@
 #import "GTSystemConfig.h"
 #import "GTStringUtils.h"
 #import "GTCaptureTool.h"
-#import "GTRemoteConfig.h"
+#import "GTClientAuthUtil.h"
 
 @interface GTLoggerFactory ()
 
@@ -230,7 +230,7 @@ void GLOG_FATAL_CAPTURE(NSString *tag, NSString *msg) {
         [GTAppenderManager readCache];
     }
 
-    [GTRemoteConfig read];
+    [GTClientAuthUtil authenticate];
 }
 
 - (GTLogger *)getLogger:(NSString *)loggerName {

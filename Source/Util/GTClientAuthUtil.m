@@ -13,14 +13,16 @@
 #import "GTLoggerConstants.h"
 #import "GTSystemConfig.h"
 #import "GTLoggerConstants.h"
+#import "GTRemoteConfig.h"
 
 @interface GTClientAuthUtil ()
 
-@property (nonatomic, strong) NSHashTable *delegates;
 @property (nonatomic, strong) NSString *accessToken;
 @property (nonatomic, strong) NSString *tokenType;
 @property (nonatomic, assign) int64_t authorizationTime;
 @property (nonatomic, assign) int64_t expiresIn;
+@property (nonatomic, assign) BOOL authorizing;
+@property (nonatomic, assign) BOOL initialized;
 
 @end
 
@@ -35,19 +37,53 @@
     return util;
 }
 
-+ (void)addDelegate:(id<GTClientAuthUtilDelegate>)delegate {
++ (BOOL)authenticated {
     GTClientAuthUtil *util = [GTClientAuthUtil util];
-    [util.delegates addObject:delegate];
+    if (![GTStringUtils isEmpty:util.accessToken] && ![GTStringUtils isEmpty:util.tokenType]) {
+        int64_t diff = ([GTDateTimeUtil currentTimeMillis] - util.authorizationTime) / 1000;
+        if (diff <= util.expiresIn) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
-+ (void)removeDelegate:(id<GTClientAuthUtilDelegate>)delegate {
++ (NSString *)accessToken {
     GTClientAuthUtil *util = [GTClientAuthUtil util];
-    [util.delegates removeObject:delegate];
+    if ([GTStringUtils isEmpty:util.accessToken]) {
+        return @"";
+    }
+    return util.accessToken;
+}
+
++ (NSString *)tokenType {
+    GTClientAuthUtil *util = [GTClientAuthUtil util];
+    if ([GTStringUtils isEmpty:util.tokenType]) {
+        return @"";
+    }
+    return util.tokenType;
+}
+
++ (void)authenticate {
+    GTClientAuthUtil *util = [GTClientAuthUtil util];
+    if (!util.authorizing) {
+        util.accessToken = nil;
+        util.tokenType = nil;
+        util.expiresIn = 0;
+        util.authorizing = YES;
+        [util requestToken];
+    }
 }
 
 + (void)auth {
     GTClientAuthUtil *util = [GTClientAuthUtil util];
-    [util checkAndRequestToken];
+    if (!util.authorizing) {
+        util.accessToken = nil;
+        util.tokenType = nil;
+        util.expiresIn = 0;
+        util.authorizing = YES;
+        [util requestToken];
+    }
 }
 
 + (void)clearToken {
@@ -58,23 +94,11 @@
     util.expiresIn = 0;
 }
 
-- (void)checkAndRequestToken {
-    if (![GTStringUtils isEmpty:_accessToken] && ![GTStringUtils isEmpty:_tokenType]) {
-        int64_t diff = ([GTDateTimeUtil currentTimeMillis] - _authorizationTime) / 1000;
-        if (diff <= _expiresIn) {
-            [self valid:_delegates.allObjects token:_accessToken tokenType:_tokenType];
-        } else {
-            [self requestToken];
-        }
-    } else {
-        [self requestToken];
-    }
-}
-
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.delegates = [NSHashTable weakObjectsHashTable];
+        self.initialized = NO;
+        self.authorizing = NO;
     }
     return self;
 }
@@ -98,63 +122,36 @@
     [request setTimeoutInterval:DEFAULT_HTTP_REQUEST_TIMEOUT];
     [request setHTTPMethod:@"POST"];
 
-    __block NSArray *temp_ = _delegates.allObjects;
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:[[NSOperationQueue alloc] init]
                            completionHandler:^(NSURLResponse *_Nullable response,
                                                NSData *_Nullable data, NSError *_Nullable connectionError) {
                                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-                               if (connectionError) {
-                                   [self failure:temp_];
-                               } else {
-                                   if (httpResponse.statusCode == 200) {
-                                       if (data.length > 0) {
-                                           NSError *error;
-                                           NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data
-                                                                                                      options:kNilOptions
-                                                                                                        error:&error];
-                                           if (!error) {
-                                               @try {
-                                                   _accessToken = [dictionary objectForKey:@"access_token"];
-                                                   _tokenType = [dictionary objectForKey:@"token_type"];
-                                                   _expiresIn = [[dictionary objectForKey:@"expires_in"] longValue];
-
-                                                   [self valid:temp_ token:_accessToken tokenType:_tokenType];
-                                               }
-                                               @catch (NSException *exception) {
-                                                   [self failure:temp_];
+                               if (httpResponse.statusCode == 200 && !connectionError) {
+                                   if (data.length > 0) {
+                                       NSError *error;
+                                       NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data
+                                                                                                  options:kNilOptions
+                                                                                                    error:&error];
+                                       if (!error) {
+                                           @try {
+                                               _accessToken = [dictionary objectForKey:@"access_token"];
+                                               _tokenType = [dictionary objectForKey:@"token_type"];
+                                               _expiresIn = [[dictionary objectForKey:@"expires_in"] longValue];
+                                               _authorizationTime = [GTDateTimeUtil currentTimeMillis];
+                                               if (!_initialized) {
+                                                   [GTRemoteConfig read];
+                                                   _initialized = YES;
                                                }
                                            }
+                                           @catch (NSException *exception) {
+                                               // Ignore exception
+                                           }
                                        }
-                                   } else {
-                                       [self invalid:temp_];
                                    }
                                }
+                               _authorizing = NO;
                            }];
-}
-
-- (void)valid:(NSArray *)delegates token:(NSString *)token tokenType:(NSString *)tokenType {
-    for (id delegate in delegates) {
-        if ([delegate respondsToSelector:@selector(didAuthorization:tokenType:)]) {
-            [delegate didAuthorization:token tokenType:tokenType];
-        }
-    }
-}
-
-- (void)invalid:(NSArray *)delegates {
-    for (id delegate in delegates) {
-        if ([delegate respondsToSelector:@selector(didInvalid)]) {
-            [delegate didInvalid];
-        }
-    }
-}
-
-- (void)failure:(NSArray *)delegates {
-    for (id delegate in delegates) {
-        if ([delegate respondsToSelector:@selector(didFailure)]) {
-            [delegate didFailure];
-        }
-    }
 }
 
 @end

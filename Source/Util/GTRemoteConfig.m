@@ -54,7 +54,9 @@
     NSError *error;
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     if (!error) {
-        config.upload = [[dictionary objectForKey:@"upload"] boolValue];
+        NSInteger level = [[dictionary objectForKey:@"level"] integerValue];
+        NSInteger targetLevel = [[dictionary objectForKey:@"targetLevel"] integerValue];
+        config.shouldUpload = level <= targetLevel;
     }
 
     [self parse:config];

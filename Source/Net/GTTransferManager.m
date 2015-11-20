@@ -56,7 +56,7 @@
     // Upload log file.
     GTLoggerConfigurator *config = [GTLoggerFactory config];
     if (config != nil) {
-        NSArray *metaList = [[GTDatabaseManager manager] findLogFileMetaListByLevel:config.uploadLogLevel];
+        NSArray *metaList = [[GTDatabaseManager manager] findAllNotUploadLogFileMetaListByLevel:config.uploadLogLevel];
         [manager uploadLogFile:metaList];
     }
 }
@@ -69,9 +69,9 @@
     GTTransferManager *manager = [GTTransferManager manager];
     GTLoggerConfigurator *config = [GTLoggerFactory config];
     if (config != nil) {
-        NSArray *metaList = [[GTDatabaseManager manager] findLogFileMetaListByLevelAndTime:config.uploadLogLevel
-                                                                                 startTime:startTime
-                                                                                   endTime:endTime];
+        NSArray *metaList = [[GTDatabaseManager manager] findAllNotUploadLogFileMetaListByLevelAndTime:config.uploadLogLevel
+                                                                                             startTime:startTime
+                                                                                               endTime:endTime];
         [manager uploadLogFile:metaList];
     }
 }

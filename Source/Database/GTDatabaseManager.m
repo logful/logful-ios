@@ -247,7 +247,19 @@
         for (NSNumber *level in levels) {
             [array addObject:[NSString stringWithFormat:@"level = %d", [level intValue]]];
         }
-        NSString *sqlString = [NSString stringWithFormat:@"SELECT * FROM LogFileMeta WHERE %@", [array componentsJoinedByString:@" OR "]];
+        NSString *sqlString = [NSString stringWithFormat:@"SELECT * FROM LogFileMeta WHERE (%@)", [array componentsJoinedByString:@" OR "]];
+        return [self executeQueryLogMetaList:sqlString];
+    }
+    return [NSArray array];
+}
+
+- (NSArray *__nonnull)findAllNotUploadLogFileMetaListByLevel:(NSArray *__nonnull)levels {
+    if (levels.count > 0) {
+        NSMutableArray *array = [NSMutableArray array];
+        for (NSNumber *level in levels) {
+            [array addObject:[NSString stringWithFormat:@"level = %d", [level intValue]]];
+        }
+        NSString *sqlString = [NSString stringWithFormat:@"SELECT * FROM LogFileMeta WHERE (%@) AND status = %d AND eof = %d", [array componentsJoinedByString:@" OR "], FILE_STATE_WILL_UPLOAD, YES];
         return [self executeQueryLogMetaList:sqlString];
     }
     return [NSArray array];
@@ -267,6 +279,21 @@
             [array addObject:[NSString stringWithFormat:@"level = %d", [level intValue]]];
         }
         NSString *sqlString = [NSString stringWithFormat:@"SELECT * FROM LogFileMeta WHERE (%@) AND createTime >= %lld AND createTime <= %lld", [array componentsJoinedByString:@" OR "], startTime, endTime];
+        return [self executeQueryLogMetaList:sqlString];
+    }
+    return [NSArray array];
+}
+
+
+- (NSArray *__nonnull)findAllNotUploadLogFileMetaListByLevelAndTime:(NSArray *__nonnull)levels
+                                                          startTime:(int64_t)startTime
+                                                            endTime:(int64_t)endTime {
+    if (levels.count > 0) {
+        NSMutableArray *array = [NSMutableArray array];
+        for (NSNumber *level in levels) {
+            [array addObject:[NSString stringWithFormat:@"level = %d", [level intValue]]];
+        }
+        NSString *sqlString = [NSString stringWithFormat:@"SELECT * FROM LogFileMeta WHERE (%@) AND createTime >= %lld AND createTime <= %lld AND status = %d AND eof = %d", [array componentsJoinedByString:@" OR "], startTime, endTime, FILE_STATE_WILL_UPLOAD, YES];
         return [self executeQueryLogMetaList:sqlString];
     }
     return [NSArray array];

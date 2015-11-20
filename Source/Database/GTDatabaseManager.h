@@ -77,6 +77,13 @@
 - (NSArray *__nonnull)findLogFileMetaListByLevel:(NSArray *__nonnull)levels;
 
 /**
+ *  查找指定 level 未上传的日志文件记录.
+ *
+ *  @return Log file meta list
+ */
+- (NSArray *__nonnull)findAllNotUploadLogFileMetaListByLevel:(NSArray *__nonnull)levels;
+
+/**
  *  查找指定时间间隔内创建的日志文件记录.
  *
  *  @param startTime Start time
@@ -85,6 +92,7 @@
  *  @return Log file meta list
  */
 - (NSArray *__nonnull)findLogFileMetaListByTime:(int64_t)startTime endTime:(int64_t)endTime;
+
 
 /**
  *  查找指定 level 和时间间隔内创建的日志文件记录.
@@ -98,6 +106,19 @@
 - (NSArray *__nonnull)findLogFileMetaListByLevelAndTime:(NSArray *__nonnull)levels
                                               startTime:(int64_t)startTime
                                                 endTime:(int64_t)endTime;
+
+/**
+ *  查找指定 level 和时间间隔内未上传的日志文件记录.
+ *
+ *  @param levels    Levels array
+ *  @param startTime Start time
+ *  @param endTime   End time
+ *
+ *  @return Log file meta list
+ */
+- (NSArray *__nonnull)findAllNotUploadLogFileMetaListByLevelAndTime:(NSArray *__nonnull)levels
+                                                          startTime:(int64_t)startTime
+                                                            endTime:(int64_t)endTime;
 
 /**
  *  查找所有未上传成功的崩溃日志文件.

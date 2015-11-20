@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, GTUploadOperationState) {
     GTUploadOperationStateFinished = 3,
 };
 
-@interface GTUploadOperation () <GTClientAuthUtilDelegate>
+@interface GTUploadOperation ()
 
 @property (nonatomic, assign) GTUploadOperationState state;
 @property (nonatomic, strong, readwrite) NSRecursiveLock *lock;
@@ -66,8 +66,9 @@ typedef NS_ENUM(NSInteger, GTUploadOperationState) {
 
     self.state = GTUploadOperationStateExecuting;
 
-    [GTClientAuthUtil addDelegate:self];
-    [GTClientAuthUtil auth];
+    if ([GTClientAuthUtil authenticated]) {
+        [self startRequest:[GTClientAuthUtil accessToken] tokenType:[GTClientAuthUtil tokenType]];
+    }
 
     [self.lock unlock];
 
@@ -133,10 +134,6 @@ typedef NS_ENUM(NSInteger, GTUploadOperationState) {
     // Rewrite
 }
 
-- (void)tokenInvalid {
-    [GTClientAuthUtil clearToken];
-}
-
 - (void)finish {
     [self.lock lock];
     self.state = GTUploadOperationStateFinished;
@@ -151,7 +148,7 @@ didReceiveResponse:(NSURLResponse *)response {
     if (httpResponse.statusCode == 200) {
         [self success];
     } else if (httpResponse.statusCode == 401) {
-        [self tokenInvalid];
+        [GTClientAuthUtil authenticate];
     }
     [self finish];
 }
@@ -170,21 +167,6 @@ didReceiveResponse:(NSURLResponse *)response {
   didFailWithError:(NSError *)error {
     [self failure];
     [self finish];
-}
-
-#pragma mark - GTClientAuthUtilDelegate
-
-- (void)didAuthorization:(NSString *)token tokenType:(NSString *)tokenType {
-    [GTClientAuthUtil removeDelegate:self];
-    [self startRequest:token tokenType:tokenType];
-}
-
-- (void)didInvalid {
-    [GTClientAuthUtil removeDelegate:self];
-}
-
-- (void)didFailure {
-    [GTClientAuthUtil removeDelegate:self];
 }
 
 @end
