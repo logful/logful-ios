@@ -1,5 +1,5 @@
 //
-//  LoggerConstant.m
+//  GTLoggerConstants.m
 //  LogLibrary
 //
 //  Created by Keith Ellis on 15/8/10.

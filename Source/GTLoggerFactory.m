@@ -69,6 +69,13 @@
     return factory.config;
 }
 
++ (void)setApiUrl:(NSString *)url {
+    GTLoggerFactory *factory = [GTLoggerFactory factory];
+    if (factory.initialized) {
+        [GTSystemConfig saveBaseUrl:url];
+    }
+}
+
 + (void)bindAlias:(NSString *)alias {
     GTLoggerFactory *factory = [GTLoggerFactory factory];
     if (factory.initialized) {

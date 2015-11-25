@@ -36,6 +36,14 @@
     [config readSystemConfig];
 }
 
++ (void)saveBaseUrl:(NSString *)url {
+    if (url == nil || url.length == 0) {
+        return;
+    }
+    GTSystemConfig *config = [GTSystemConfig config];
+    config.baseUrl = url;
+}
+
 + (void)saveAlias:(NSString *)alias {
     if (alias == nil || alias.length == 0) {
         return;

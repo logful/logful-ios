@@ -13,6 +13,7 @@
 + (void)read;
 
 + (void)saveAlias:(NSString *)alias;
++ (void)saveBaseUrl:(NSString *)url;
 + (void)saveStatus:(BOOL)on;
 
 + (NSString *)baseUrl;

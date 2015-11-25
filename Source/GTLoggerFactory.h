@@ -51,6 +51,13 @@
 + (GTLogger *)logger:(NSString *)loggerName;
 
 /**
+ *  set logful api address.
+ *
+ *  @param logful api address.
+ */
++ (void)setApiUrl:(NSString *)url;
+
+/**
  *  Bind log system alias.
  *
  *  @param alias Alias name
