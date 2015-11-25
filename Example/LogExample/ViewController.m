@@ -31,31 +31,31 @@
 }
 
 - (IBAction)verbose:(id)sender {
-    GLOG_VERBOSE(@"ViewController", @"some verbose message");
+    GLOG_VERBOSE(@"ViewController", @"some|verbose|message");
 }
 
 - (IBAction)debug:(id)sender {
-    GLOG_DEBUG(@"ViewController", @"some debug message");
+    GLOG_DEBUG(@"ViewController", @"some|debug|message");
 }
 
 - (IBAction)info:(id)sender {
-    GLOG_INFO(@"ViewController", @"some info message");
+    GLOG_INFO(@"ViewController", @"some|info|message");
 }
 
 - (IBAction)warn:(id)sender {
-    GLOG_WARN(@"ViewController", @"some warn message");
+    GLOG_WARN(@"ViewController", @"some|warn|message");
 }
 
 - (IBAction)error:(id)sender {
-    GLOG_ERROR(@"ViewController", @"some error message");
+    GLOG_ERROR(@"ViewController", @"some|error|message");
 }
 
 - (IBAction)exception:(id)sender {
-    GLOG_EXCEPTION(@"ViewController", @"some exception message");
+    GLOG_EXCEPTION(@"ViewController", @"some|exception|message");
 }
 
 - (IBAction)fatal:(id)sender {
-    GLOG_FATAL(@"ViewController", @"some fatal message");
+    GLOG_FATAL(@"ViewController", @"some|fatal|message");
 }
 
 - (IBAction)batch:(id)sender {
@@ -93,7 +93,7 @@
 }
 
 - (IBAction)captureScreen:(id)sender {
-    GLOG_DEBUG_CAPTURE(@"ViewController", @"some debug message");
+    GLOG_DEBUG_CAPTURE(@"ViewController", @"some|debug|message with capture");
 }
 
 @end
