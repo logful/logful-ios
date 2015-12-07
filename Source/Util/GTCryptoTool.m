@@ -37,7 +37,7 @@ const unsigned char *salt = NULL;
     return tool;
 }
 
-+ (NSString *)encrypt:(NSString *)string {
++ (NSData *)encrypt:(NSString *)string {
     GTCryptoTool *tool = [GTCryptoTool tool];
     if (tool.key == nil || tool.iv == nil) {
         [tool generateKey];
@@ -92,7 +92,7 @@ const unsigned char *salt = NULL;
     return YES;
 }
 
-- (NSString *)encrypt:(const char *)input {
+- (NSData *)encrypt:(const char *)input {
     [self.lock lock];
 
     int input_len;
@@ -102,7 +102,7 @@ const unsigned char *salt = NULL;
     EVP_CIPHER_CTX_init(&ctx);
 
     if (!EVP_EncryptInit_ex(&ctx, EVP_aes_256_cbc(), NULL, self.key.bytes, self.iv.bytes)) {
-        return CRYPTO_ERROR;
+        return [CRYPTO_ERROR dataUsingEncoding:NSUTF8StringEncoding];
     };
 
     input_len = (int) strlen(input) + 1;
@@ -111,29 +111,24 @@ const unsigned char *salt = NULL;
     int bytes_written = 0;
     int ciphertext_len = 0;
     if (!EVP_EncryptUpdate(&ctx, cipher_text, &bytes_written, (unsigned const char *) input, input_len)) {
-        return CRYPTO_ERROR;
+        return [CRYPTO_ERROR dataUsingEncoding:NSUTF8StringEncoding];
     };
     ciphertext_len += bytes_written;
 
     if (!EVP_EncryptFinal_ex(&ctx, cipher_text + bytes_written, &bytes_written)) {
-        return CRYPTO_ERROR;
+        return [CRYPTO_ERROR dataUsingEncoding:NSUTF8StringEncoding];
     };
     ciphertext_len += bytes_written;
 
     EVP_CIPHER_CTX_cleanup(&ctx);
 
     NSData *data = [NSData dataWithBytes:cipher_text length:ciphertext_len];
-    NSString *base64 = [data base64EncodedStringWithOptions:0];
-    NSString *len_string = [NSString stringWithFormat:@"%d__%@", ciphertext_len, base64];
-
-    NSData *result_data = [len_string dataUsingEncoding:NSUTF8StringEncoding];
-    NSString *result = [result_data base64EncodedStringWithOptions:0];
 
     free(cipher_text);
 
     [self.lock unlock];
 
-    return result;
+    return data;
 }
 
 @end

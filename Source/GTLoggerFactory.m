@@ -228,6 +228,8 @@ void GLOG_FATAL_CAPTURE(NSString *tag, NSString *msg) {
         SetUncaughtExceptionHandler();
     }
 
+    [GTClientAuthUtil authenticate];
+
     _initialized = YES;
 
     [_lock unlock];
@@ -236,8 +238,6 @@ void GLOG_FATAL_CAPTURE(NSString *tag, NSString *msg) {
         // Read log event cache.
         [GTAppenderManager readCache];
     }
-
-    [GTClientAuthUtil authenticate];
 }
 
 - (GTLogger *)getLogger:(NSString *)loggerName {

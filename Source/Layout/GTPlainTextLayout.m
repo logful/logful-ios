@@ -13,13 +13,13 @@
 @implementation GTPlainTextLayout
 
 - (NSData *)data:(GTLogEvent *)logEvent {
-    NSString *encryptedTag = [GTCryptoTool encrypt:[logEvent getTag]];
-    NSString *encryptedMsg = [GTCryptoTool encrypt:[logEvent getMessage]];
+    // NSString *encryptedTag = [GTCryptoTool encrypt:[logEvent getTag]];
+    // NSString *encryptedMsg = [GTCryptoTool encrypt:[logEvent getMessage]];
 
     NSArray *values = @[ [logEvent getDateString],
                          @([logEvent getTimeMillis]),
-                         encryptedTag,
-                         encryptedMsg,
+                         @"",
+                         @"",
                          @([logEvent getLayoutId]) ];
 
     NSString *line = [NSString stringWithFormat:@"%@\n", [values componentsJoinedByString:@"|"]];

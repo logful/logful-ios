@@ -10,6 +10,6 @@
 
 @interface GTCryptoTool : NSObject
 
-+ (NSString *)encrypt:(NSString *)string;
++ (NSData *)encrypt:(NSString *)string;
 
 @end

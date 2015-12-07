@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, GTUploadOperationState) {
     self.state = GTUploadOperationStateExecuting;
 
     if ([GTClientAuthUtil authenticated]) {
-        [self startRequest:[GTClientAuthUtil accessToken] tokenType:[GTClientAuthUtil tokenType]];
+        [self startRequest:[GTClientAuthUtil authorization]];
     }
 
     [self.lock unlock];
@@ -75,7 +75,7 @@ typedef NS_ENUM(NSInteger, GTUploadOperationState) {
     [self finish];
 }
 
-- (void)startRequest:(NSString *)token tokenType:(NSString *)tokenType {
+- (void)startRequest:(NSString *)authorization {
     GTMultipartInputStream *body = [self bodyStream];
     NSURL *url = [self url];
 
@@ -88,7 +88,7 @@ typedef NS_ENUM(NSInteger, GTUploadOperationState) {
     // Setting the body of the post to the reqeust
     [request setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", [body boundary]] forHTTPHeaderField:@"Content-Type"];
     [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long) [body length]] forHTTPHeaderField:@"Content-Length"];
-    [request addValue:[NSString stringWithFormat:@"%@ %@", tokenType, token] forHTTPHeaderField:@"Authorization"];
+    [request addValue:authorization forHTTPHeaderField:@"Authorization"];
     [request setHTTPBodyStream:body];
 
     [request setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];

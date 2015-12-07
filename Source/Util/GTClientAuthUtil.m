@@ -48,34 +48,15 @@
     return NO;
 }
 
-+ (NSString *)accessToken {
++ (NSString *)authorization {
     GTClientAuthUtil *util = [GTClientAuthUtil util];
-    if ([GTStringUtils isEmpty:util.accessToken]) {
-        return @"";
+    if (![GTStringUtils isEmpty:util.accessToken] && ![GTStringUtils isEmpty:util.tokenType]) {
+        return [NSString stringWithFormat:@"%@ %@", util.tokenType, util.accessToken];
     }
-    return util.accessToken;
-}
-
-+ (NSString *)tokenType {
-    GTClientAuthUtil *util = [GTClientAuthUtil util];
-    if ([GTStringUtils isEmpty:util.tokenType]) {
-        return @"";
-    }
-    return util.tokenType;
+    return @"";
 }
 
 + (void)authenticate {
-    GTClientAuthUtil *util = [GTClientAuthUtil util];
-    if (!util.authorizing) {
-        util.accessToken = nil;
-        util.tokenType = nil;
-        util.expiresIn = 0;
-        util.authorizing = YES;
-        [util requestToken];
-    }
-}
-
-+ (void)auth {
     GTClientAuthUtil *util = [GTClientAuthUtil util];
     if (!util.authorizing) {
         util.accessToken = nil;

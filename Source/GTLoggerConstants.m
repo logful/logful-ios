@@ -37,7 +37,9 @@ NSString *const DEFAULT_LOGGER_NAME = @"app";
 
 NSString *const DEFAULT_MSG_LAYOUT = @"";
 
-NSString *const API_BASE_URL = @"http://demo.logful.aoapp.com:9600";
+//NSString *const API_BASE_URL = @"http://demo.logful.aoapp.com:9600";
+
+NSString *const API_BASE_URL = @"http://127.0.0.1:8800";
 
 NSString *const CLIENT_AUTH_URI = @"/oauth/token";
 
@@ -51,7 +53,7 @@ NSString *const UPLOAD_ATTACHMENT_FILE_URI = @"/log/attachment/upload";
 
 NSString *const USER_PREFERENCE_FILE_NAME = @"Logful.plist";
 
-NSString *const VERSION = @"0.2.0";
+NSString *const VERSION = @"0.2.1";
 
 NSString *const APP_KEY = @"525b8747323d49078a96e49f0189de98";
 

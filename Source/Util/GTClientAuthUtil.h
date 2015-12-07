@@ -11,8 +11,7 @@
 @interface GTClientAuthUtil : NSObject
 
 + (BOOL)authenticated;
-+ (NSString *)accessToken;
-+ (NSString *)tokenType;
++ (NSString *)authorization;
 
 + (void)authenticate;
 

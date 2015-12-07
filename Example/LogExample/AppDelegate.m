@@ -23,7 +23,7 @@
     config.defaultMsgLayout = @"s,sendMessage,%s|r,receiveMessage,%s";
     config.caughtException = NO;
     [GTLoggerFactory initWithConfig:config];
-    [GTLoggerFactory setApiUrl:@"http://demo.logful.aoapp.com:9600"];
+    //[GTLoggerFactory setApiUrl:@"http://demo.logful.aoapp.com:9600"];
     return YES;
 }
 
