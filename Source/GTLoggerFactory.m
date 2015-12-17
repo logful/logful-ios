@@ -6,21 +6,22 @@
 //  Copyright (c) 2015年 getui. All rights reserved.
 //
 
-#import "GTLoggerFactory.h"
-#import "GTBaseLogger.h"
-#import "GTMutableDictionary.h"
-#import "GTDatabaseManager.h"
-#import "GTLoggerConstants.h"
 #import "GTAppenderManager.h"
-#import "GTLogStorage.h"
-#import "GTScheduleManager.h"
-#import "GTTransferManager.h"
-#import "GTUncaughtExceptionHandler.h"
-#import "GTDatabaseManager.h"
-#import "GTSystemConfig.h"
-#import "GTStringUtils.h"
+#import "GTBaseLogger.h"
 #import "GTCaptureTool.h"
 #import "GTClientAuthUtil.h"
+#import "GTClientUserInitService.h"
+#import "GTDatabaseManager.h"
+#import "GTDatabaseManager.h"
+#import "GTLogStorage.h"
+#import "GTLoggerConstants.h"
+#import "GTLoggerFactory.h"
+#import "GTMutableDictionary.h"
+#import "GTScheduleManager.h"
+#import "GTStringUtils.h"
+#import "GTSystemConfig.h"
+#import "GTTransferManager.h"
+#import "GTUncaughtExceptionHandler.h"
 
 @interface GTLoggerFactory ()
 
@@ -69,11 +70,16 @@
     return factory.config;
 }
 
++ (void)setAppKey:(NSString *)key {
+    [GTSystemConfig saveAppKey:key];
+}
+
++ (void)setAppSecret:(NSString *)secret {
+    [GTSystemConfig saveAppSecret:secret];
+}
+
 + (void)setApiUrl:(NSString *)url {
-    GTLoggerFactory *factory = [GTLoggerFactory factory];
-    if (factory.initialized) {
-        [GTSystemConfig saveBaseUrl:url];
-    }
+    [GTSystemConfig saveBaseUrl:url];
 }
 
 + (void)bindAlias:(NSString *)alias {
@@ -228,16 +234,15 @@ void GLOG_FATAL_CAPTURE(NSString *tag, NSString *msg) {
         SetUncaughtExceptionHandler();
     }
 
-    [GTClientAuthUtil authenticate];
+    [GTClientUserInitService authenticate];
 
     _initialized = YES;
 
-    [_lock unlock];
-
     if ([GTSystemConfig isON]) {
-        // Read log event cache.
         [GTAppenderManager readCache];
     }
+
+    [_lock unlock];
 }
 
 - (GTLogger *)getLogger:(NSString *)loggerName {

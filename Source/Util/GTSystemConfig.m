@@ -6,15 +6,17 @@
 //  Copyright (c) 2015年 getui. All rights reserved.
 //
 
-#import "GTSystemConfig.h"
-#import "GTLoggerConstants.h"
 #import "GTLogStorage.h"
+#import "GTLoggerConstants.h"
 #import "GTStringUtils.h"
+#import "GTSystemConfig.h"
 
 @interface GTSystemConfig ()
 
 @property (nonatomic, strong) NSString *baseUrl;
 @property (nonatomic, strong) NSString *aliasName;
+@property (nonatomic, strong) NSString *appKey;
+@property (nonatomic, strong) NSString *appSecret;
 @property (nonatomic, assign) BOOL on;
 
 @end
@@ -32,7 +34,6 @@
 
 + (void)read {
     GTSystemConfig *config = [GTSystemConfig config];
-    [config readUserPreferenceFile];
     [config readSystemConfig];
 }
 
@@ -60,6 +61,16 @@
     }
 }
 
++ (void)saveAppKey:(NSString *)appKey {
+    GTSystemConfig *config = [GTSystemConfig config];
+    config.appKey = appKey;
+}
+
++ (void)saveAppSecret:(NSString *)appSecret {
+    GTSystemConfig *config = [GTSystemConfig config];
+    config.appSecret = appSecret;
+}
+
 + (NSString *)baseUrl {
     GTSystemConfig *config = [GTSystemConfig config];
     if (config.baseUrl == nil || config.baseUrl.length == 0) {
@@ -81,6 +92,20 @@
     return config.on;
 }
 
++ (NSString *)appKey {
+    GTSystemConfig *config = [GTSystemConfig config];
+    return config.appKey;
+}
+
++ (NSString *)appSecret {
+    GTSystemConfig *config = [GTSystemConfig config];
+    return config.appSecret;
+}
+
++ (NSURL *)apiUrl:(NSString *)uri {
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [GTSystemConfig baseUrl], uri]];
+}
+
 - (instancetype)init {
     self = [super init];
     if (self) {
@@ -88,31 +113,6 @@
         self.aliasName = @"";
     }
     return self;
-}
-
-/**
- *  Read user preference file.
- *
- * <?xml version="1.0" encoding="UTF-8"?>
- * <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
- * <plist version="1.0">
- * <dict>
- * <key>baseUrl</key>
- * <string>http://127.0.0.1</string>
- * </dict>
- * </plist>
- */
-- (void)readUserPreferenceFile {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:USER_PREFERENCE_FILE_NAME];
-
-    BOOL isDir;
-    BOOL exist = [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDir];
-    if (exist && !isDir) {
-        NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile:filePath];
-        _baseUrl = [dictionary objectForKey:@"baseUrl"];
-    }
 }
 
 - (void)readSystemConfig {

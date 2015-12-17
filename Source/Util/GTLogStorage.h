@@ -24,7 +24,6 @@
 + (BOOL)isLogFile:(NSString *)filename;
 + (unsigned long long)logFileSize:(NSString *)filename;
 
-+ (NSString *)systemInfoFilePath;
 + (NSString *)systemConfigFilePath;
 
 @end

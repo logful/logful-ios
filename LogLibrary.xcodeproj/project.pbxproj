@@ -17,7 +17,6 @@
 		531411AC1B9C0D3300BCD867 /* GTUncaughtExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 531411AA1B9C0D3300BCD867 /* GTUncaughtExceptionHandler.h */; };
 		531411AD1B9C0D3300BCD867 /* GTUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 531411AB1B9C0D3300BCD867 /* GTUncaughtExceptionHandler.m */; };
 		5321129C1BCE54310081F01D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5321129B1BCE54310081F01D /* SystemConfiguration.framework */; };
-		5321129E1BCE54370081F01D /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5321129D1BCE54370081F01D /* MobileCoreServices.framework */; };
 		532112A01BCE551D0081F01D /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5321129F1BCE551D0081F01D /* libsqlite3.0.tbd */; };
 		532112A21BCE55260081F01D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 532112A11BCE55260081F01D /* libz.tbd */; };
 		532112A71BCE59950081F01D /* GTRemoteConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 532112A51BCE59950081F01D /* GTRemoteConfig.h */; };
@@ -131,7 +130,8 @@
 		53BD7F5A1B8D6D6900579957 /* GTReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BD7F0E1B8D6D6700579957 /* GTReachability.m */; };
 		53F0209E1B71BED100CBA738 /* LogLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F020921B71BED100CBA738 /* LogLibrary.framework */; };
 		53F020A51B71BED100CBA738 /* LogLibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F020A41B71BED100CBA738 /* LogLibraryTests.m */; };
-		53F020C01B71BF1500CBA738 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F020AF1B71BF1500CBA738 /* openssl.framework */; };
+		53FD0F951C22649A00C14971 /* GTClientUserInitService.h in Headers */ = {isa = PBXBuildFile; fileRef = 53FD0F931C22649A00C14971 /* GTClientUserInitService.h */; };
+		53FD0F961C22649A00C14971 /* GTClientUserInitService.m in Sources */ = {isa = PBXBuildFile; fileRef = 53FD0F941C22649A00C14971 /* GTClientUserInitService.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -272,7 +272,8 @@
 		53F0209D1B71BED100CBA738 /* LogLibraryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LogLibraryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		53F020A31B71BED100CBA738 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		53F020A41B71BED100CBA738 /* LogLibraryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogLibraryTests.m; sourceTree = "<group>"; };
-		53F020AF1B71BF1500CBA738 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openssl.framework; sourceTree = "<group>"; };
+		53FD0F931C22649A00C14971 /* GTClientUserInitService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTClientUserInitService.h; sourceTree = "<group>"; };
+		53FD0F941C22649A00C14971 /* GTClientUserInitService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTClientUserInitService.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -282,9 +283,7 @@
 			files = (
 				532112A21BCE55260081F01D /* libz.tbd in Frameworks */,
 				532112A01BCE551D0081F01D /* libsqlite3.0.tbd in Frameworks */,
-				5321129E1BCE54370081F01D /* MobileCoreServices.framework in Frameworks */,
 				5321129C1BCE54310081F01D /* SystemConfiguration.framework in Frameworks */,
-				53F020C01B71BF1500CBA738 /* openssl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,6 +424,8 @@
 				535932CE1BD0862700E4745F /* GTUploadAttachmentFileOperation.m */,
 				532346F41B96F0C900915861 /* GTUploadOperation.h */,
 				532346F51B96F0C900915861 /* GTUploadOperation.m */,
+				53FD0F931C22649A00C14971 /* GTClientUserInitService.h */,
+				53FD0F941C22649A00C14971 /* GTClientUserInitService.m */,
 			);
 			path = Net;
 			sourceTree = "<group>";
@@ -548,7 +549,6 @@
 				5321129F1BCE551D0081F01D /* libsqlite3.0.tbd */,
 				5321129D1BCE54370081F01D /* MobileCoreServices.framework */,
 				5321129B1BCE54310081F01D /* SystemConfiguration.framework */,
-				53F020AF1B71BF1500CBA738 /* openssl.framework */,
 			);
 			path = Framework;
 			sourceTree = "<group>";
@@ -564,6 +564,7 @@
 				532346D41B96802600915861 /* GTScheduleManager.h in Headers */,
 				530E1F011B9AD0390004EA53 /* GTMultipartInputStream.h in Headers */,
 				533066271B93E5DB008D5D86 /* GTGzipTool.h in Headers */,
+				53FD0F951C22649A00C14971 /* GTClientUserInitService.h in Headers */,
 				5378EF471B95DCF300AF6554 /* GTTransferManager.h in Headers */,
 				535160A21B9FFED3002EC3EF /* GTSystemConfig.h in Headers */,
 				53BD7F431B8D6D6800579957 /* GTLogger.h in Headers */,
@@ -739,6 +740,7 @@
 				533066201B93E53B008D5D86 /* GTFileManager.m in Sources */,
 				535160A31B9FFED3002EC3EF /* GTSystemConfig.m in Sources */,
 				532346D91B96807200915861 /* GTRefreshScheduleTask.m in Sources */,
+				53FD0F961C22649A00C14971 /* GTClientUserInitService.m in Sources */,
 				53257A881B8FF47E00360D06 /* GTBaseAppender.m in Sources */,
 				53BD7F5A1B8D6D6900579957 /* GTReachability.m in Sources */,
 				53BD7F2B1B8D6D6800579957 /* GTErrorHandler.m in Sources */,

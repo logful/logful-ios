@@ -7,9 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Security/Security.h>
 
 @interface GTCryptoTool : NSObject
 
-+ (NSData *)encrypt:(NSString *)string;
++ (SecKeyRef)addPublicKey:(NSString *)base64String tag:(NSString *)tag;
+
++ (NSData *)encryptAES:(NSData *)data;
++ (NSData *)encryptRSA:(NSData *)data withKeyRef:(SecKeyRef)keyRef;
 
 @end

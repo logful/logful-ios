@@ -6,9 +6,9 @@
 //  Copyright (c) 2015年 getui. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "GTLogger.h"
 #import "GTLoggerConfigurator.h"
+#import <Foundation/Foundation.h>
 
 /**
  * 日志系统入口文件.
@@ -49,6 +49,20 @@
  *  @return Logger instance
  */
 + (GTLogger *)logger:(NSString *)loggerName;
+
+/**
+ *  Set app key.
+ *
+ *  @param key App key string
+ */
++ (void)setAppKey:(NSString *)key;
+
+/**
+ *  Set app secret.
+ *
+ *  @param secret App secret string
+ */
++ (void)setAppSecret:(NSString *)secret;
 
 /**
  *  set logful api address.

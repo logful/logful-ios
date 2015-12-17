@@ -20,27 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <UIKit/UIKit.h>
-#import <MobileCoreServices/UTType.h>
 #import "GTMultipartInputStream.h"
+#import <UIKit/UIKit.h>
 #define kHeaderStringFormat @"--%@\r\nContent-Disposition: form-data; name=\"%@\"\r\n\r\n"
 #define kHeaderDataFormat @"--%@\r\nContent-Disposition: form-data; name=\"%@\"\r\nContent-Type: %@\r\n\r\n"
 #define kHeaderPathFormat @"--%@\r\nContent-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\nContent-Type: %@\r\n\r\n"
 #define kFooterFormat @"--%@--\r\n"
 
 static NSString *MIMETypeForExtension(NSString *extension) {
-
-    CFStringRef uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef) extension, NULL);
-    if (uti != NULL) {
-        CFStringRef mime = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType);
-        CFRelease(uti);
-        if (mime != NULL) {
-            NSString *type = [NSString stringWithString:(__bridge NSString *) mime];
-            CFRelease(mime);
-            return type;
-        }
+    if ([extension isEqualToString:@"jpg"]) {
+        return @"image/jpeg";
+    } else if ([extension isEqualToString:@"txt"]) {
+        return @"text/plain";
+    } else if ([extension isEqualToString:@"png"]) {
+        return @"image/png";
+    } else {
+        return @"application/octet-stream";
     }
-    return @"application/octet-stream";
 }
 
 @interface GTMultipartElement : NSObject

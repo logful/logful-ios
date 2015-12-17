@@ -431,6 +431,7 @@
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				INFOPLIST_FILE = LogExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MACH_O_TYPE = mh_execute;
 				PRODUCT_BUNDLE_IDENTIFIER = com.getui.logful.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -443,6 +444,7 @@
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				INFOPLIST_FILE = LogExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MACH_O_TYPE = mh_execute;
 				PRODUCT_BUNDLE_IDENTIFIER = com.getui.logful.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

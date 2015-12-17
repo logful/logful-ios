@@ -7,22 +7,17 @@
 //
 
 #import "GTCryptoTool.h"
-#import <openssl/evp.h>
-#import <stdio.h>
-#import <stdlib.h>
+#import <CommonCrypto/CommonCryptor.h>
+#import <Security/Security.h>
 
-#define KEY_PREFIX @"A8P20vWlvfSu3JMO6tBjgr05UvjHAh2x"
 #define CRYPTO_ERROR @"CRYPTO_ERROR"
-
-const EVP_CIPHER *cipher;
-const EVP_MD *dgst = NULL;
-const unsigned char *salt = NULL;
 
 @interface GTCryptoTool ()
 
 @property (nonatomic, strong) NSRecursiveLock *lock;
-@property (nonatomic, strong) NSData *key;
-@property (nonatomic, strong) NSData *iv;
+@property (nonatomic, strong) NSData *errorData;
+@property (nonatomic, strong) dispatch_queue_t cryptoQueue;
+@property (nonatomic, readonly) CCCryptorRef cryptor;
 
 @end
 
@@ -37,98 +32,225 @@ const unsigned char *salt = NULL;
     return tool;
 }
 
-+ (NSData *)encrypt:(NSString *)string {
-    GTCryptoTool *tool = [GTCryptoTool tool];
-    if (tool.key == nil || tool.iv == nil) {
-        [tool generateKey];
-    }
++ (SecKeyRef)addPublicKey:(NSString *)base64String tag:(NSString *)tag {
+    return [[GTCryptoTool tool] _add_public_key_reference:base64String tag:tag];
+}
 
-    return [tool encrypt:[string UTF8String]];
++ (NSData *)encryptAES:(NSData *)data {
+    GTCryptoTool *tool = [GTCryptoTool tool];
+    NSData *result = [tool _encrypt_aes:data];
+    if (result == nil) {
+        return tool.errorData;
+    }
+    NSLog(@"%zd == %@", result.length, result);
+    return result;
+}
+
++ (NSData *)encryptRSA:(NSData *)data withKeyRef:(SecKeyRef)keyRef {
+    return [[GTCryptoTool tool] _encrypt_rsa:data withKeyRef:keyRef];
 }
 
 - (id)init {
     self = [super init];
     if (self) {
         self.lock = [[NSRecursiveLock alloc] init];
-        [self generateKey];
+        //[self generateKey];
+
+        //NSString *key = @"9rX5eh941YCrusrohrCizRa5WwwDOesW";
+        //char keyPtr[kCCKeySizeAES256 + 1];
+        //bzero(keyPtr, sizeof(keyPtr));
+        //[key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
+
+        /*
+        char ivPtr[kCCKeySizeAES256 + 1];
+        memset(ivPtr, 0, sizeof(ivPtr));
+         */
+
+        NSData *key = [@"9rX5eh941YCrusrohrCizRa5WwwDOesW" dataUsingEncoding:NSUTF8StringEncoding];
+        CCCryptorStatus status = CCCryptorCreate(kCCEncrypt,
+                                                 kCCAlgorithmAES128,
+                                                 kCCOptionPKCS7Padding,
+                                                 key.bytes,
+                                                 key.length,
+                                                 NULL,
+                                                 &_cryptor);
+        if (status != kCCSuccess || _cryptor == NULL) {
+            return nil;
+        }
+        self.cryptoQueue = dispatch_queue_create("com.getui.log.crypto", NULL);
+        self.errorData = [CRYPTO_ERROR dataUsingEncoding:NSUTF8StringEncoding];
     }
     return self;
 }
 
-- (BOOL)generateKey {
-    NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
-    NSString *keyString = [NSString stringWithFormat:@"%@%@", bundleId, KEY_PREFIX];
-    NSString *keyBase64 = [[keyString dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0];
+- (SecKeyRef)_add_public_key_reference:(NSString *)key tag:(NSString *)tag {
+    key = [key stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+    key = [key stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    key = [key stringByReplacingOccurrencesOfString:@"\t" withString:@""];
+    key = [key stringByReplacingOccurrencesOfString:@" " withString:@""];
 
-    const char *key_char = [keyBase64 UTF8String];
-
-    unsigned char key[EVP_MAX_KEY_LENGTH];
-    unsigned char iv[EVP_MAX_IV_LENGTH];
-
-    OpenSSL_add_all_algorithms();
-
-    cipher = EVP_get_cipherbyname("aes-256-cbc");
-    dgst = EVP_get_digestbyname("md5");
-
-    if (!cipher) {
-        return NO;
+    NSData *data = [[NSData alloc] initWithBase64EncodedString:key
+                                                       options:NSDataBase64DecodingIgnoreUnknownCharacters];
+    data = [self stripPublicKeyHeader:data];
+    if (!data) {
+        return nil;
     }
 
-    if (!dgst) {
-        return NO;
+    NSData *d_tag = [NSData dataWithBytes:[tag UTF8String] length:[tag length]];
+
+    NSMutableDictionary *publicKey = [[NSMutableDictionary alloc] init];
+    [publicKey setObject:(__bridge id) kSecClassKey forKey:(__bridge id) kSecClass];
+    [publicKey setObject:(__bridge id) kSecAttrKeyTypeRSA forKey:(__bridge id) kSecAttrKeyType];
+    [publicKey setObject:d_tag forKey:(__bridge id) kSecAttrApplicationTag];
+    SecItemDelete((__bridge CFDictionaryRef) publicKey);
+
+    [publicKey setObject:data forKey:(__bridge id) kSecValueData];
+    [publicKey setObject:(__bridge id) kSecAttrKeyClassPublic forKey:(__bridge id) kSecAttrKeyClass];
+    [publicKey setObject:[NSNumber numberWithBool:YES] forKey:(__bridge id) kSecReturnPersistentRef];
+
+    CFTypeRef persistKey = nil;
+    OSStatus status = SecItemAdd((__bridge CFDictionaryRef) publicKey, &persistKey);
+    if (persistKey != nil) {
+        CFRelease(persistKey);
+    }
+    if ((status != noErr) && (status != errSecDuplicateItem)) {
+        return nil;
     }
 
-    if (!EVP_BytesToKey(cipher, dgst, salt,
-                        (unsigned char *) key_char,
-                        (int) strlen(key_char), 1, key, iv)) {
-        return NO;
+    [publicKey removeObjectForKey:(__bridge id) kSecValueData];
+    [publicKey removeObjectForKey:(__bridge id) kSecReturnPersistentRef];
+    [publicKey setObject:[NSNumber numberWithBool:YES] forKey:(__bridge id) kSecReturnRef];
+    [publicKey setObject:(__bridge id) kSecAttrKeyTypeRSA forKey:(__bridge id) kSecAttrKeyType];
+
+    SecKeyRef keyRef = nil;
+    status = SecItemCopyMatching((__bridge CFDictionaryRef) publicKey, (CFTypeRef *) &keyRef);
+    if (status != noErr) {
+        return nil;
     }
-
-    self.key = [NSData dataWithBytes:key length:64];
-    self.iv = [NSData dataWithBytes:iv length:16];
-
-    EVP_cleanup();
-
-    return YES;
+    return keyRef;
 }
 
-- (NSData *)encrypt:(const char *)input {
-    [self.lock lock];
+- (NSData *)_encrypt_rsa:(NSData *)data withKeyRef:(SecKeyRef)keyRef {
+    if (!data || !keyRef) {
+        return nil;
+    }
 
-    int input_len;
-    unsigned char *cipher_text;
+    const uint8_t *srcbuf = (const uint8_t *) [data bytes];
+    size_t srclen = (size_t) data.length;
 
-    EVP_CIPHER_CTX ctx;
-    EVP_CIPHER_CTX_init(&ctx);
+    size_t block_size = SecKeyGetBlockSize(keyRef) * sizeof(uint8_t);
+    void *outbuf = malloc(block_size);
+    size_t src_block_size = block_size - 11;
 
-    if (!EVP_EncryptInit_ex(&ctx, EVP_aes_256_cbc(), NULL, self.key.bytes, self.iv.bytes)) {
-        return [CRYPTO_ERROR dataUsingEncoding:NSUTF8StringEncoding];
-    };
+    NSMutableData *ret = [[NSMutableData alloc] init];
+    for (int idx = 0; idx < srclen; idx += src_block_size) {
+        size_t data_len = srclen - idx;
+        if (data_len > src_block_size) {
+            data_len = src_block_size;
+        }
 
-    input_len = (int) strlen(input) + 1;
-    cipher_text = (unsigned char *) malloc(input_len + EVP_CIPHER_CTX_block_size(&ctx));
+        size_t outlen = block_size;
+        OSStatus status = noErr;
+        status = SecKeyEncrypt(keyRef,
+                               kSecPaddingPKCS1,
+                               srcbuf + idx,
+                               data_len,
+                               outbuf,
+                               &outlen);
+        if (status != 0) {
+            ret = nil;
+            break;
+        } else {
+            [ret appendBytes:outbuf length:outlen];
+        }
+    }
 
-    int bytes_written = 0;
-    int ciphertext_len = 0;
-    if (!EVP_EncryptUpdate(&ctx, cipher_text, &bytes_written, (unsigned const char *) input, input_len)) {
-        return [CRYPTO_ERROR dataUsingEncoding:NSUTF8StringEncoding];
-    };
-    ciphertext_len += bytes_written;
+    free(outbuf);
+    CFRelease(keyRef);
 
-    if (!EVP_EncryptFinal_ex(&ctx, cipher_text + bytes_written, &bytes_written)) {
-        return [CRYPTO_ERROR dataUsingEncoding:NSUTF8StringEncoding];
-    };
-    ciphertext_len += bytes_written;
+    return ret;
+}
 
-    EVP_CIPHER_CTX_cleanup(&ctx);
+- (NSData *)_encrypt_aes:(NSData *)data {
+    __block NSData *result;
+    dispatch_sync(_cryptoQueue, ^{
+        size_t bufsize = CCCryptorGetOutputLength(_cryptor, (size_t)[data length], true);
+        void *buffer = malloc(bufsize);
+        size_t dataOutMoved = 0;
+        size_t cipherLength = 0;
+        CCCryptorStatus status = CCCryptorUpdate(_cryptor,
+                                                 data.bytes,
+                                                 (size_t) data.length,
+                                                 buffer,
+                                                 bufsize,
+                                                 &dataOutMoved);
+        if (status == kCCSuccess) {
+            cipherLength += dataOutMoved;
+            status = CCCryptorFinal(_cryptor,
+                                    buffer + dataOutMoved,
+                                    bufsize - dataOutMoved,
+                                    &dataOutMoved);
+            if (status == kCCSuccess) {
+                cipherLength += dataOutMoved;
+                result = [NSData dataWithBytesNoCopy:buffer length:cipherLength freeWhenDone:YES];
+            } else {
+                free(buffer);
+            }
+        } else {
+            free(buffer);
+        }
+    });
+    return result;
+}
 
-    NSData *data = [NSData dataWithBytes:cipher_text length:ciphertext_len];
+- (NSData *)stripPublicKeyHeader:(NSData *)d_key {
+    // Skip ASN.1 public key header
+    if (d_key == nil)
+        return (nil);
 
-    free(cipher_text);
+    unsigned int len = (unsigned int) d_key.length;
+    if (!len)
+        return (nil);
 
-    [self.lock unlock];
+    unsigned char *c_key = (unsigned char *) [d_key bytes];
+    unsigned int idx = 0;
 
-    return data;
+    if (c_key[idx++] != 0x30)
+        return (nil);
+
+    if (c_key[idx] > 0x80)
+        idx += c_key[idx] - 0x80 + 1;
+    else
+        idx++;
+
+    // PKCS #1 rsaEncryption szOID_RSA_RSA
+    static unsigned char seqiod[] =
+        {0x30, 0x0d, 0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x01,
+         0x01, 0x05, 0x00};
+    if (memcmp(&c_key[idx], seqiod, 15))
+        return (nil);
+
+    idx += 15;
+
+    if (c_key[idx++] != 0x03)
+        return (nil);
+
+    if (c_key[idx] > 0x80)
+        idx += c_key[idx] - 0x80 + 1;
+    else
+        idx++;
+
+    if (c_key[idx++] != '\0')
+        return (nil);
+
+    // Now make a new NSData from this buffer
+    return ([NSData dataWithBytes:&c_key[idx] length:len - idx]);
+}
+
+- (void)dealloc {
+    if (_cryptor) {
+        CCCryptorRelease(_cryptor);
+    }
 }
 
 @end

@@ -7,8 +7,8 @@
 //
 
 #import "GTBinaryLayout.h"
-#import "GTLogEvent.h"
 #import "GTCryptoTool.h"
+#import "GTLogEvent.h"
 
 @implementation GTBinaryLayout
 
@@ -25,14 +25,14 @@
     [data appendBytes:&timeChunk length:sizeof(timeChunk)];
 
     // Tag chunk
-    NSData *tagChunk = [GTCryptoTool encrypt:[logEvent getTag]];
+    NSData *tagChunk = [GTCryptoTool encryptAES:[[logEvent getTag] dataUsingEncoding:NSUTF8StringEncoding]];
     int16_t tagChunkLen = [tagChunk length];
     int16_t tagChunkLenBig = CFSwapInt16HostToBig(tagChunkLen);
     [data appendBytes:&tagChunkLenBig length:sizeof(tagChunkLenBig)];
     [data appendData:tagChunk];
 
     // Message chunk
-    NSData *msgChunk = [GTCryptoTool encrypt:[logEvent getMessage]];
+    NSData *msgChunk = [GTCryptoTool encryptAES:[[logEvent getMessage] dataUsingEncoding:NSUTF8StringEncoding]];
     int16_t msgChunkLen = [msgChunk length];
     int16_t msgChunkLenBig = CFSwapInt16HostToBig(msgChunkLen);
     [data appendBytes:&msgChunkLenBig length:sizeof(msgChunkLenBig)];

@@ -104,21 +104,6 @@
     return 0;
 }
 
-+ (NSString *)systemInfoFilePath {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-
-    NSString *dirPath = [documentsDirectory stringByAppendingPathComponent:LOG_SYSTEM_DIR_NAME];
-    BOOL isDir;
-    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:dirPath isDirectory:&isDir];
-    if (exists && isDir) {
-        NSString *path = [NSString stringWithFormat:@"/%@/%@", LOG_SYSTEM_DIR_NAME, SYSTEM_INFO_FILE_NAME];
-        return [documentsDirectory stringByAppendingPathComponent:path];
-    }
-
-    return nil;
-}
-
 + (NSString *)systemConfigFilePath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];

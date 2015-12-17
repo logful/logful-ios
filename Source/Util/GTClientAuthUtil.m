@@ -85,6 +85,7 @@
 }
 
 - (void)requestToken {
+    /*
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",
                                                                  [GTSystemConfig baseUrl],
                                                                  CLIENT_AUTH_URI]];
@@ -133,6 +134,7 @@
                                }
                                _authorizing = NO;
                            }];
+     */
 }
 
 @end

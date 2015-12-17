@@ -15,15 +15,16 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
     GTLoggerConfigurator *config = [GTLoggerConfigurator defaultConfig];
     config.defaultLoggerName = @"sample";
     config.defaultMsgLayout = @"s,sendMessage,%s|r,receiveMessage,%s";
     config.caughtException = NO;
+
+    [GTLoggerFactory setApiUrl:@"http://127.0.0.1:8800"];
+    [GTLoggerFactory setAppKey:@"b24a1290e9755c63b9ec5703be91883f"];
+    [GTLoggerFactory setAppSecret:@"3c7f66c0341b6892342b785b235b5455"];
     [GTLoggerFactory initWithConfig:config];
-    //[GTLoggerFactory setApiUrl:@"http://demo.logful.aoapp.com:9600"];
     return YES;
 }
 

@@ -23,9 +23,6 @@ extern NSString *const LOG_SYSTEM_DIR_NAME;
 // 日志文件存储文件夹名称.
 extern NSString *const LOG_DIR_NAME;
 
-// 环境信息存储文件名称.
-extern NSString *const SYSTEM_INFO_FILE_NAME;
-
 // 系统配置文件名称.
 extern NSString *const SYSTEM_CONFIG_FILE_NAME;
 
@@ -50,11 +47,11 @@ extern NSString *const DEFAULT_MSG_LAYOUT;
 // api url base.
 extern NSString *const API_BASE_URL;
 
-// 客户端授权 api.
-extern NSString *const CLIENT_AUTH_URI;
+// 客户端授权 api .
+extern NSString *const AUTHORIZATION_URI;
 
-// 系统环境信息文件上传 api.
-extern NSString *const UPLOAD_SYSTEM_INFO_URI;
+// 上传客户端信息 api.
+extern NSString *const UPLOAD_USER_INFO_URI;
 
 // 日志文件上传 api.
 extern NSString *const UPLOAD_LOG_FILE_URI;
@@ -65,15 +62,8 @@ extern NSString *const UPLOAD_CRASH_REPORT_FILE_URI;
 // 上传附件文件 api.
 extern NSString *const UPLOAD_ATTACHMENT_FILE_URI;
 
-// 用户配置文件名称.
-extern NSString *const USER_PREFERENCE_FILE_NAME;
-
 // 当前日志库版本.
 extern NSString *const VERSION;
-
-extern NSString *const APP_KEY;
-
-extern NSString *const APP_SECRET;
 
 // 默认同时上传任务数.
 static NSInteger DEFAULT_ACTIVE_UPLOAD_TASK = 2;

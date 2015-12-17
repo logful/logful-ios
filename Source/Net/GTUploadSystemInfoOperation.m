@@ -51,9 +51,12 @@
 }
 
 - (NSURL *)url {
+    /*
     return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",
                                                            [GTSystemConfig baseUrl],
                                                            UPLOAD_SYSTEM_INFO_URI]];
+     */
+    return nil;
 }
 
 - (void)success {
