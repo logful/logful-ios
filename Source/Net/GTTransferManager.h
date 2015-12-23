@@ -10,8 +10,6 @@
 
 @interface GTTransferManager : NSObject
 
-+ (void)uploadSystemInfo;
-
 + (void)uploadLogFile;
 + (void)uploadLogFile:(uint64_t)startTime endTime:(uint64_t)endTime;
 

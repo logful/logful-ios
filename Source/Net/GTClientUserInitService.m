@@ -12,10 +12,11 @@
 #import "GTDeviceID.h"
 #import "GTLoggerConstants.h"
 #import "GTLoggerFactory.h"
+#import "GTScheduleManager.h"
+#import "GTServerConfig.h"
 #import "GTStringUtils.h"
 #import "GTStringUtils.h"
 #import "GTSystemConfig.h"
-#import <Security/Security.h>
 
 @interface GTClientUserInitService ()
 
@@ -23,7 +24,6 @@
 @property (nonatomic, strong) NSString *tokenType;
 @property (nonatomic, assign) int64_t authorizationTime;
 @property (nonatomic, assign) int64_t expiresIn;
-@property (nonatomic, readonly) SecKeyRef publickKey;
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
 
 @end
@@ -40,7 +40,7 @@
 }
 
 + (BOOL)authenticated {
-    return YES;
+    return [[GTClientUserInitService service] _authenticated];
 }
 
 + (NSString *)authorization {
@@ -57,6 +57,13 @@
         _operationQueue = [[NSOperationQueue alloc] init];
     }
     return self;
+}
+
+- (BOOL)_authenticated {
+    if (![GTStringUtils isEmpty:_tokenType] && ![GTStringUtils isEmpty:_accessToken]) {
+        return YES;
+    }
+    return NO;
 }
 
 - (void)_authenticate {
@@ -95,9 +102,8 @@
                                            _tokenType = [dictionary objectForKey:@"token_type"];
                                            _expiresIn = [[dictionary objectForKey:@"expires_in"] longValue];
                                            _authorizationTime = [GTDateTimeUtil currentTimeMillis];
-                                           _publickKey = [GTCryptoTool addPublicKey:[dictionary objectForKey:@"public_key"] tag:@"public_key"];
-
-                                           [self sendClientUserReport];
+                                           [GTCryptoTool addPublicKey:[dictionary objectForKey:@"public_key"]];
+                                           [self sendUserReport];
                                        }
                                        @catch (NSException *exception) {
                                            // Ignore exception
@@ -114,7 +120,7 @@
     return @"";
 }
 
-- (void)sendClientUserReport {
+- (void)sendUserReport {
     NSURL *url = [GTSystemConfig apiUrl:UPLOAD_USER_INFO_URI];
 
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
@@ -122,10 +128,14 @@
     [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [request addValue:[self _authorization] forHTTPHeaderField:@"Authorization"];
 
-    NSData *chunk = [GTCryptoTool encryptRSA:[self userInformation] withKeyRef:_publickKey];
+    NSData *chunk = [GTCryptoTool encryptAES:[self userInformation]];
+    if (!chunk) {
+        return;
+    }
 
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     [dictionary setObject:[GTLoggerFactory version] forKey:@"sdkVersion"];
+    [dictionary setObject:[GTCryptoTool securityString] forKey:@"signature"];
     [dictionary setObject:[chunk base64EncodedStringWithOptions:0] forKey:@"chunk"];
 
     NSError *error;
@@ -147,16 +157,21 @@
                                                NSError *_Nullable connectionError) {
                                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
                                if (httpResponse.statusCode == 200 && !connectionError) {
-                                   // TODO
+                                   NSError *error;
+                                   NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data
+                                                                                              options:kNilOptions
+                                                                                                error:&error];
+                                   if (!error) {
+                                       [self impServerConfig:[[GTServerConfig alloc] initWithAttr:dictionary]];
+                                   }
                                }
-                               NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
                            }];
 }
 
 - (NSData *)userInformation {
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
     NSDictionary *dictionary = @{
-        @"platform" : @"ios",
+        @"platform" : @(PLATFORM_IOS),
         @"uid" : [GTDeviceID uid],
         @"alias" : [GTSystemConfig alias],
         @"model" : [UIDevice currentDevice].model,
@@ -165,7 +180,8 @@
         @"osVersion" : [UIDevice currentDevice].systemVersion,
         @"appId" : [[NSBundle mainBundle] bundleIdentifier],
         @"version" : infoDictionary[@"CFBundleVersion"],
-        @"versionString" : infoDictionary[@"CFBundleShortVersionString"]
+        @"versionString" : infoDictionary[@"CFBundleShortVersionString"],
+        @"recordOn" : @([GTLoggerFactory isOn])
     };
 
     NSError *err;
@@ -175,6 +191,19 @@
     }
 
     return [NSData data];
+}
+
+- (void)impServerConfig:(GTServerConfig *)config {
+    if (config == nil) {
+        return;
+    }
+
+    if (!config.granted) {
+        return;
+    }
+
+    [GTScheduleManager schedule];
+    // TODO
 }
 
 @end

@@ -38,4 +38,21 @@
     return [[string dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0];
 }
 
++ (NSData *)convertToData:(NSDictionary *)dic {
+    NSError *err;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:dic options:0 error:&err];
+    if (!err) {
+        return data;
+    }
+    return nil;
+}
+
++ (NSString *)convertToString:(NSDictionary *)dic {
+    NSData *data = [self convertToData:dic];
+    if (data) {
+        return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    }
+    return nil;
+}
+
 @end

@@ -65,7 +65,7 @@
 + (void)setAppSecret:(NSString *)secret;
 
 /**
- *  set logful api address.
+ *  Set logful api address.
  *
  *  @param logful api address.
  */

@@ -8,17 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
-@interface GTConfig : NSObject
+@interface GTServerConfig : NSObject
 
-@property (nonatomic, assign) int16_t level;
+@property (nonatomic, assign) BOOL granted;
+
+/*
 @property (nonatomic, assign) int16_t targetLevel;
 @property (nonatomic, assign) BOOL shouldUpload;
 @property (nonatomic, assign) int16_t scheduleType;
 @property (nonatomic, assign) int64_t scheduleTime;
 @property (nonatomic, strong) NSArray *scheduleArray;
+ */
 
-@property (nonatomic, assign) BOOL upload;
-
-+ (GTConfig *)defaultConfig;
+- (instancetype)initWithAttr:(NSDictionary *)dictionary;
 
 @end

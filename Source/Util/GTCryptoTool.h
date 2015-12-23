@@ -11,9 +11,11 @@
 
 @interface GTCryptoTool : NSObject
 
-+ (SecKeyRef)addPublicKey:(NSString *)base64String tag:(NSString *)tag;
++ (void)addPublicKey:(NSString *)base64String;
 
 + (NSData *)encryptAES:(NSData *)data;
-+ (NSData *)encryptRSA:(NSData *)data withKeyRef:(SecKeyRef)keyRef;
++ (NSData *)encryptRSA:(NSData *)data;
+
++ (NSString *)securityString;
 
 @end

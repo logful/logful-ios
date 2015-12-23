@@ -13,5 +13,7 @@
 + (BOOL)isEmpty:(NSString *)string;
 + (NSString *)propertiesDictionaryToString:(NSDictionary *)dictionary;
 + (NSString *)base64:(NSString *)string;
++ (NSData *)convertToData:(NSDictionary *)dic;
++ (NSString *)convertToString:(NSDictionary *)dic;
 
 @end

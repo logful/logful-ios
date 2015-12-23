@@ -9,7 +9,6 @@
 #import "GTAppenderManager.h"
 #import "GTBaseLogger.h"
 #import "GTCaptureTool.h"
-#import "GTClientAuthUtil.h"
 #import "GTClientUserInitService.h"
 #import "GTDatabaseManager.h"
 #import "GTDatabaseManager.h"
@@ -206,9 +205,6 @@ void GLOG_FATAL_CAPTURE(NSString *tag, NSString *msg) {
     return self;
 }
 
-/**
- *  Init log system
- */
 - (void)initSystem {
 
     [_lock lock];

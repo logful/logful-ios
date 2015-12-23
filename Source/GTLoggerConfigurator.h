@@ -64,12 +64,12 @@
 @property (nonatomic, strong, nonnull) NSString *defaultMsgLayout;
 
 /**
- *  截图文件压缩质量（1~100）.
+ *  截图文件压缩质量（1 ~ 100）.
  */
 @property (nonatomic, assign) int screenshotQuality;
 
 /**
- *  截图文件缩放比例（0.1~1）.
+ *  截图文件缩放比例（0.1 ~ 1）.
  */
 @property (nonatomic, assign) float screenshotScale;
 

@@ -14,7 +14,6 @@
 #import "GTDatabaseManager.h"
 #import "GTUploadLogFileOperation.h"
 #import "GTUploadCrashReportOperation.h"
-#import "GTUploadSystemInfoOperation.h"
 #import "GTLoggerConstants.h"
 #import "GTAttachmentFileMeta.h"
 #import "GTUploadAttachmentFileOperation.h"
@@ -34,16 +33,6 @@
         manager = [[self alloc] init];
     });
     return manager;
-}
-
-+ (void)uploadSystemInfo {
-    if (![GTReachabilityManager shouldUpload]) {
-        return;
-    }
-
-    GTTransferManager *manager = [GTTransferManager manager];
-    GTUploadSystemInfoOperation *operation = [[GTUploadSystemInfoOperation alloc] init];
-    [manager addOperation:operation];
 }
 
 + (void)uploadLogFile {

@@ -6,10 +6,10 @@
 //  Copyright (c) 2015年 getui. All rights reserved.
 //
 
-#import "GTUploadOperation.h"
-#import "GTMultipartInputStream.h"
+#import "GTClientUserInitService.h"
 #import "GTLoggerConstants.h"
-#import "GTClientAuthUtil.h"
+#import "GTMultipartInputStream.h"
+#import "GTUploadOperation.h"
 
 #define kUploadOperatioLockName @"com.getui.log.upload.operation.lock"
 
@@ -66,8 +66,8 @@ typedef NS_ENUM(NSInteger, GTUploadOperationState) {
 
     self.state = GTUploadOperationStateExecuting;
 
-    if ([GTClientAuthUtil authenticated]) {
-        [self startRequest:[GTClientAuthUtil authorization]];
+    if ([GTClientUserInitService authenticated]) {
+        [self startRequest:[GTClientUserInitService authorization]];
     }
 
     [self.lock unlock];
@@ -143,12 +143,10 @@ typedef NS_ENUM(NSInteger, GTUploadOperationState) {
 #pragma mark - NSURLConnectionDelegate
 
 - (void)connection:(NSURLConnection __unused *)connection
-didReceiveResponse:(NSURLResponse *)response {
+    didReceiveResponse:(NSURLResponse *)response {
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-    if (httpResponse.statusCode == 200) {
+    if (httpResponse.statusCode == 202) {
         [self success];
-    } else if (httpResponse.statusCode == 401) {
-        [GTClientAuthUtil authenticate];
     }
     [self finish];
 }

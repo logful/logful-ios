@@ -47,7 +47,7 @@ extern NSString *const DEFAULT_MSG_LAYOUT;
 // api url base.
 extern NSString *const API_BASE_URL;
 
-// 客户端授权 api .
+// 客户端授权 api.
 extern NSString *const AUTHORIZATION_URI;
 
 // 上传客户端信息 api.
@@ -99,6 +99,8 @@ static int FILE_STATE_DELETED = 0x04;
 static int DEFAULT_SCREENSHOT_QUALITY = 80;
 
 static float DEFAULT_SCREENSHOT_SCALE = 0.5;
+
+static int PLATFORM_IOS = 2;
 
 @interface GTLoggerConstants : NSObject
 

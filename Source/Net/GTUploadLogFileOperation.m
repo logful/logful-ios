@@ -6,19 +6,21 @@
 //  Copyright (c) 2015年 getui. All rights reserved.
 //
 
-#import "GTUploadLogFileOperation.h"
+#import "GTChecksum.h"
+#import "GTCryptoTool.h"
+#import "GTDatabaseManager.h"
+#import "GTDateTimeUtil.h"
+#import "GTDeviceID.h"
+#import "GTGzipTool.h"
 #import "GTLogFileMeta.h"
 #import "GTLogStorage.h"
-#import "GTGzipTool.h"
-#import "GTChecksum.h"
-#import "GTLoggerConstants.h"
-#import "GTMultipartInputStream.h"
-#import "GTDeviceID.h"
-#import "GTDatabaseManager.h"
 #import "GTLoggerConfigurator.h"
+#import "GTLoggerConstants.h"
 #import "GTLoggerFactory.h"
-#import "GTDateTimeUtil.h"
+#import "GTMultipartInputStream.h"
+#import "GTStringUtils.h"
 #import "GTSystemConfig.h"
+#import "GTUploadLogFileOperation.h"
 
 @interface GTUploadLogFileOperation ()
 
@@ -82,25 +84,42 @@
 
     self.filePath = inFilePath;
 
-    GTMultipartInputStream *body = [[GTMultipartInputStream alloc] init];
-    [body addPartWithName:@"platform" string:@"ios"];
-    [body addPartWithName:@"sdkVersion" string:[GTLoggerFactory version]];
-    [body addPartWithName:@"uid" string:[GTDeviceID uid]];
-    [body addPartWithName:@"appId" string:[[NSBundle mainBundle] bundleIdentifier]];
-    [body addPartWithName:@"loggerName" string:self.meta.loggerName];
-    [body addPartWithName:@"layouts" string:self.layoutJson];
-    [body addPartWithName:@"level" string:[NSString stringWithFormat:@"%d", self.meta.level]];
-    [body addPartWithName:@"fileSum" string:fileMD5];
-    [body addPartWithName:@"alias" string:[GTSystemConfig alias]];
-    [body addPartWithName:@"logFile" path:outFilePath];
+    NSDictionary *dic1 = @{
+        @"platform" : @(PLATFORM_IOS),
+        @"uid" : [GTDeviceID uid],
+        @"appId" : [[NSBundle mainBundle] bundleIdentifier],
+        @"loggerName" : self.meta.loggerName,
+        @"layouts" : self.layoutJson,
+        @"level" : [NSString stringWithFormat:@"%d", self.meta.level],
+        @"fileSum" : fileMD5,
+        @"alias" : [GTSystemConfig alias]
+    };
+    NSString *attr = [GTStringUtils convertToString:dic1];
+    if (!attr) {
+        return nil;
+    }
+    NSData *chunk = [GTCryptoTool encryptAES:[attr dataUsingEncoding:NSUTF8StringEncoding]];
+    if (!chunk) {
+        return nil;
+    }
 
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+    [dictionary setObject:[GTLoggerFactory version] forKey:@"sdkVersion"];
+    [dictionary setObject:[GTCryptoTool securityString] forKey:@"signature"];
+    [dictionary setObject:[chunk base64EncodedStringWithOptions:0] forKey:@"chunk"];
+    NSString *payload = [GTStringUtils convertToString:dictionary];
+    if (!payload) {
+        return nil;
+    }
+
+    GTMultipartInputStream *body = [[GTMultipartInputStream alloc] init];
+    [body addPartWithName:@"payload" string:payload];
+    [body addPartWithName:@"logFile" path:outFilePath];
     return body;
 }
 
 - (NSURL *)url {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",
-                                                           [GTSystemConfig baseUrl],
-                                                           UPLOAD_LOG_FILE_URI]];
+    return [GTSystemConfig apiUrl:UPLOAD_LOG_FILE_URI];
 }
 
 - (void)success {
