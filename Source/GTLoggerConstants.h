@@ -84,7 +84,7 @@ static unsigned long long DEFAULT_LOG_FILE_MAX_SIZE = 524288;
 static NSInteger DEFAULT_UPDATE_SYSTEM_FREQUENCY = 3600;
 
 // 默认 http 连接超时（单位：毫秒）.
-static NSInteger DEFAULT_HTTP_REQUEST_TIMEOUT = 500;
+static NSInteger DEFAULT_HTTP_REQUEST_TIMEOUT = 60000;
 
 static BOOL SYSTEM_DEBUG_MODE = YES;
 

@@ -18,7 +18,7 @@
 #import "GTAttachmentFileMeta.h"
 #import "GTLogFileMeta.h"
 
-#define DATABASE_NAME @"LogMeta.sqlite"
+#define DATABASE_NAME @"Logful.sqlite"
 
 @interface GTDatabaseManager () {
     sqlite3 *db;
@@ -204,6 +204,7 @@
         int16_t layoutId = [self saveMsgLayout:msgLayout];
         if (layoutId != -1) {
             [_layoutDictionary setObject:@(layoutId) forKey:layoutString];
+            return layoutId;
         }
     } else {
         return [object shortValue];

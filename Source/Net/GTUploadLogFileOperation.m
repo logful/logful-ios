@@ -90,7 +90,7 @@
         @"appId" : [[NSBundle mainBundle] bundleIdentifier],
         @"loggerName" : self.meta.loggerName,
         @"layouts" : self.layoutJson,
-        @"level" : [NSString stringWithFormat:@"%d", self.meta.level],
+        @"level" : @(self.meta.level),
         @"fileSum" : fileMD5,
         @"alias" : [GTSystemConfig alias]
     };

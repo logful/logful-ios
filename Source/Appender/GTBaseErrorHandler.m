@@ -12,7 +12,7 @@
 
 - (void)error:(NSString *)msg {
     if (msg != nil) {
-        NSLog(@"%@", msg);
+        
     }
 }
 

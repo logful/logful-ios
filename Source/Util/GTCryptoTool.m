@@ -14,10 +14,8 @@
 #import <CommonCrypto/CommonKeyDerivation.h>
 #import <Security/Security.h>
 
-#define CRYPTO_ERROR @"CRYPTO_ERROR"
-
 #define PBKDF_ROUND 50
-#define KEY_LENGTH 32
+#define AES_KEY_SIZE 32
 
 @interface GTCryptoTool ()
 
@@ -93,12 +91,22 @@
         }
 
         self.cryptoQueue = dispatch_queue_create("com.getui.log.crypto", NULL);
-        self.errorData = [CRYPTO_ERROR dataUsingEncoding:NSUTF8StringEncoding];
+
+        Byte byte[] = {0x00, 0x00};
+        self.errorData = [[NSData alloc] initWithBytes:byte length:2];
     }
     return self;
 }
 
 - (void)_add_public_key_reference:(NSString *)key tag:(NSString *)tag {
+    NSRange spos = [key rangeOfString:@"-----BEGIN PUBLIC KEY-----"];
+    NSRange epos = [key rangeOfString:@"-----END PUBLIC KEY-----"];
+    if (spos.location != NSNotFound && epos.location != NSNotFound) {
+        NSUInteger s = spos.location + spos.length;
+        NSUInteger e = epos.location;
+        NSRange range = NSMakeRange(s, e - s);
+        key = [key substringWithRange:range];
+    }
     key = [key stringByReplacingOccurrencesOfString:@"\r" withString:@""];
     key = [key stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     key = [key stringByReplacingOccurrencesOfString:@"\t" withString:@""];
@@ -233,7 +241,7 @@
 
 - (NSData *)calculateKey:(NSData *)password salt:(NSData *)salt {
     NSMutableData *key = [NSMutableData data];
-    [key setLength:KEY_LENGTH];
+    [key setLength:AES_KEY_SIZE];
     int result = CCKeyDerivationPBKDF(kCCPBKDF2,
                                       password.bytes,
                                       password.length,

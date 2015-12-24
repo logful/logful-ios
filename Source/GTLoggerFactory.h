@@ -35,6 +35,20 @@
 + (GTLoggerConfigurator *)config;
 
 /**
+ *  Set debug mode.
+ *
+ *  @param debug Debug mode
+ */
++ (void)setDebugMode:(BOOL)debug;
+
+/**
+ *  Check debug mode on.
+ *
+ *  @return Debug state
+ */
++ (BOOL)isDebugMode;
+
+/**
  *  Get current log library version.
  *
  *  @return Version string

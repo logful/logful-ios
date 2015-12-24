@@ -64,7 +64,6 @@ NSString *kGTReachabilityChangedNotification = @"kGTNetworkReachabilityChangedNo
 
 static void PrintReachabilityFlags(SCNetworkReachabilityFlags flags, const char *comment) {
 #if kShouldPrintReachabilityFlags
-
     NSLog(@"Reachability Flag Status: %c%c %c%c%c%c%c%c%c %s\n",
           (flags & kSCNetworkReachabilityFlagsIsWWAN) ? 'W' : '-',
           (flags & kSCNetworkReachabilityFlagsReachable) ? 'R' : '-',
@@ -79,7 +78,6 @@ static void PrintReachabilityFlags(SCNetworkReachabilityFlags flags, const char 
           comment);
 #endif
 }
-
 
 static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info) {
 #pragma unused(target, flags)

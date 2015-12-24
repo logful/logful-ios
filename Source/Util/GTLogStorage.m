@@ -43,8 +43,6 @@
     if (storage.cacheDirPath == nil) {
         storage.cacheDirPath = [storage dirWithName:CACHE_DIR_NAME];
     }
-
-    NSLog(@"%@", storage.logDirPath);
 }
 
 + (BOOL)fileExistsAtPath:(NSString *)filePath {

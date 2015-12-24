@@ -18,12 +18,13 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     GTLoggerConfigurator *config = [GTLoggerConfigurator defaultConfig];
     config.defaultLoggerName = @"sample";
-    config.defaultMsgLayout = @"s,sendMessage,%s|r,receiveMessage,%s";
+    config.defaultMsgLayout = @"e,exception,%s";
     config.caughtException = NO;
 
     [GTLoggerFactory setApiUrl:@"http://127.0.0.1:8800"];
     [GTLoggerFactory setAppKey:@"b24a1290e9755c63b9ec5703be91883f"];
     [GTLoggerFactory setAppSecret:@"3c7f66c0341b6892342b785b235b5455"];
+    [GTLoggerFactory setDebugMode:YES];
     [GTLoggerFactory initWithConfig:config];
     return YES;
 }

@@ -13,6 +13,7 @@
 #import "GTDatabaseManager.h"
 #import "GTDatabaseManager.h"
 #import "GTLogStorage.h"
+#import "GTLogUtil.h"
 #import "GTLoggerConstants.h"
 #import "GTLoggerFactory.h"
 #import "GTMutableDictionary.h"
@@ -28,6 +29,7 @@
 @property (nonatomic, strong) GTLoggerConfigurator *config;
 @property (nonatomic, strong) NSRecursiveLock *lock;
 @property (nonatomic, assign) BOOL initialized;
+@property (nonatomic, assign) BOOL debug;
 
 @end
 
@@ -58,6 +60,16 @@
 
 + (NSString *)version {
     return VERSION;
+}
+
++ (void)setDebugMode:(BOOL)debug {
+    GTLoggerFactory *instance = [GTLoggerFactory factory];
+    instance.debug = debug;
+}
+
++ (BOOL)isDebugMode {
+    GTLoggerFactory *instance = [GTLoggerFactory factory];
+    return instance.debug;
 }
 
 + (GTLogger *)logger:(NSString *)loggerName {
@@ -92,7 +104,6 @@
     GTLoggerFactory *factory = [GTLoggerFactory factory];
     if (factory.initialized) {
         [GTSystemConfig saveStatus:YES];
-
         [GTAppenderManager readCache];
     }
 }
@@ -201,6 +212,7 @@ void GLOG_FATAL_CAPTURE(NSString *tag, NSString *msg) {
         self.initialized = NO;
         self.lock = [[NSRecursiveLock alloc] init];
         self.lock.name = @"com.getui.log.factory.lock";
+        self.debug = NO;
     }
     return self;
 }

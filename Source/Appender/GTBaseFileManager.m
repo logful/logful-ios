@@ -57,7 +57,7 @@
         }
         @catch (NSException *exception) {
             if (SYSTEM_DEBUG_MODE) {
-                NSLog(@"%@", exception);
+                //NSLog(@"%@", exception);
             }
         }
         @finally {

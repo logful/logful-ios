@@ -30,19 +30,19 @@
 }
 
 - (IBAction)verbose:(id)sender {
-    GLOG_VERBOSE(@"ViewController", @"some|verbose|message");
+    GLOG_VERBOSE(@"ViewController", @"some");
 }
 
 - (IBAction)debug:(id)sender {
-    GLOG_DEBUG(@"ViewController", @"some|debug|message");
+    GLOG_DEBUG(@"ViewController", @"some|");
 }
 
 - (IBAction)info:(id)sender {
-    GLOG_INFO(@"ViewController", @"some|info|message");
+    GLOG_INFO(@"ViewController", @"e:test");
 }
 
 - (IBAction)warn:(id)sender {
-    GLOG_WARN(@"ViewController", @"some|warn|message");
+    GLOG_WARN(@"ViewController", @"e:test|a:resr");
 }
 
 - (IBAction)error:(id)sender {
