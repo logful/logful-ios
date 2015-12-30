@@ -10,6 +10,7 @@
 
 @interface GTClientUserInitService : NSObject
 
++ (BOOL)granted;
 + (BOOL)authenticated;
 + (NSString *)authorization;
 

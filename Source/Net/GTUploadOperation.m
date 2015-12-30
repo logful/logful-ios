@@ -7,6 +7,7 @@
 //
 
 #import "GTClientUserInitService.h"
+#import "GTLogUtil.h"
 #import "GTLoggerConstants.h"
 #import "GTMultipartInputStream.h"
 #import "GTUploadOperation.h"
@@ -165,6 +166,7 @@ typedef NS_ENUM(NSInteger, GTUploadOperationState) {
   didFailWithError:(NSError *)error {
     [self failure];
     [self finish];
+    [GTLogUtil e:NSStringFromClass(self.class) msg:nil err:error];
 }
 
 @end

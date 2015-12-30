@@ -86,8 +86,6 @@ static NSInteger DEFAULT_UPDATE_SYSTEM_FREQUENCY = 3600;
 // 默认 http 连接超时（单位：毫秒）.
 static NSInteger DEFAULT_HTTP_REQUEST_TIMEOUT = 60000;
 
-static BOOL SYSTEM_DEBUG_MODE = YES;
-
 static int FILE_STATE_NORMAL = 0x01;
 
 static int FILE_STATE_WILL_UPLOAD = 0x02;

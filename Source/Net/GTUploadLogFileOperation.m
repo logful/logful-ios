@@ -14,6 +14,8 @@
 #import "GTGzipTool.h"
 #import "GTLogFileMeta.h"
 #import "GTLogStorage.h"
+#import "GTLogUtil.h"
+#import "GTLogUtil.h"
 #import "GTLoggerConfigurator.h"
 #import "GTLoggerConstants.h"
 #import "GTLoggerFactory.h"
@@ -73,12 +75,14 @@
     // Compress log file.
     NSError *error;
     if (![GTGzipTool compress:inFilePath outFilePath:outFilePath error:&error]) {
+        [GTLogUtil e:NSStringFromClass(self.class) msg:@"Compress log file failed!"];
         return nil;
     }
 
     // Calculate out gzip file md5.
     NSString *fileMD5 = [GTChecksum fileMD5:outFilePath];
     if (fileMD5 == nil) {
+        [GTLogUtil e:NSStringFromClass(self.class) msg:@"Calculate log file md5 failed!"];
         return nil;
     }
 
@@ -100,6 +104,7 @@
     }
     NSData *chunk = [GTCryptoTool encryptAES:[attr dataUsingEncoding:NSUTF8StringEncoding]];
     if (!chunk) {
+        [GTLogUtil e:NSStringFromClass(self.class) msg:@"Encrypt log file meta data failed!"];
         return nil;
     }
 
@@ -115,6 +120,9 @@
     GTMultipartInputStream *body = [[GTMultipartInputStream alloc] init];
     [body addPartWithName:@"payload" string:payload];
     [body addPartWithName:@"logFile" path:outFilePath];
+
+    [GTLogUtil i:NSStringFromClass(self.class) msg:[NSString stringWithFormat:@"Will upload log file %@!", _meta.filename]];
+
     return body;
 }
 
@@ -123,6 +131,7 @@
 }
 
 - (void)success {
+    [GTLogUtil i:NSStringFromClass(self.class) msg:[NSString stringWithFormat:@"Upload log file %@ successful!", _meta.filename]];
     // Change log file meta status.
     GTLoggerConfigurator *config = [GTLoggerFactory config];
     if (config != nil && [config deleteUploadedLogFile]) {
@@ -143,8 +152,7 @@
 }
 
 - (void)failure {
-    if (SYSTEM_DEBUG_MODE) {
-    }
+    [GTLogUtil e:NSStringFromClass(self.class) msg:[NSString stringWithFormat:@"Upload log file %@ failed!", _meta.filename]];
 }
 
 @end

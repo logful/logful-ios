@@ -7,6 +7,7 @@
 //
 
 #import "GTLogStorage.h"
+#import "GTLogUtil.h"
 #import "GTLoggerConstants.h"
 
 @interface GTLogStorage ()
@@ -43,6 +44,7 @@
     if (storage.cacheDirPath == nil) {
         storage.cacheDirPath = [storage dirWithName:CACHE_DIR_NAME];
     }
+    [GTLogUtil i:NSStringFromClass(self.class) msg:storage.logDirPath];
 }
 
 + (BOOL)fileExistsAtPath:(NSString *)filePath {

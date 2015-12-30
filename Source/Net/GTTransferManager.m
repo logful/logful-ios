@@ -6,17 +6,19 @@
 //  Copyright (c) 2015年 getui. All rights reserved.
 //
 
-#import "GTTransferManager.h"
-#import "GTReachabilityManager.h"
+#import "GTAttachmentFileMeta.h"
+#import "GTClientUserInitService.h"
+#import "GTDatabaseManager.h"
 #import "GTLogFileMeta.h"
+#import "GTLogUtil.h"
+#import "GTLoggerConstants.h"
 #import "GTLoggerFactory.h"
 #import "GTMsgLayout.h"
-#import "GTDatabaseManager.h"
-#import "GTUploadLogFileOperation.h"
-#import "GTUploadCrashReportOperation.h"
-#import "GTLoggerConstants.h"
-#import "GTAttachmentFileMeta.h"
+#import "GTReachabilityManager.h"
+#import "GTTransferManager.h"
 #import "GTUploadAttachmentFileOperation.h"
+#import "GTUploadCrashReportOperation.h"
+#import "GTUploadLogFileOperation.h"
 
 @interface GTTransferManager ()
 
@@ -36,7 +38,7 @@
 }
 
 + (void)uploadLogFile {
-    if (![GTReachabilityManager shouldUpload]) {
+    if (![[self class] shouldUpload]) {
         return;
     }
 
@@ -51,7 +53,7 @@
 }
 
 + (void)uploadLogFile:(uint64_t)startTime endTime:(uint64_t)endTime {
-    if (![GTReachabilityManager shouldUpload]) {
+    if (![[self class] shouldUpload]) {
         return;
     }
 
@@ -66,7 +68,7 @@
 }
 
 + (void)uploadCrashReport {
-    if (![GTReachabilityManager shouldUpload]) {
+    if (![[self class] shouldUpload]) {
         return;
     }
 
@@ -75,7 +77,7 @@
 }
 
 + (void)uploadAttachment {
-    if (![GTReachabilityManager shouldUpload]) {
+    if (![[self class] shouldUpload]) {
         return;
     }
 
@@ -85,6 +87,18 @@
         GTUploadAttachmentFileOperation *operation = [GTUploadAttachmentFileOperation create:meta];
         [manager addOperation:operation];
     }
+}
+
++ (BOOL)shouldUpload {
+    if (![GTClientUserInitService granted]) {
+        [GTLogUtil w:NSStringFromClass(self.class) msg:@"Client user not allow to upload file!"];
+        return NO;
+    }
+    if (![GTReachabilityManager shouldUpload]) {
+        [GTLogUtil w:NSStringFromClass(self.class) msg:@"Not allow to upload use current network type!"];
+        return NO;
+    }
+    return YES;
 }
 
 - (NSOperationQueue *)getTransferQueue {

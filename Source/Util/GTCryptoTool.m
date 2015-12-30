@@ -8,6 +8,7 @@
 
 #import "GTCryptoTool.h"
 #import "GTDeviceID.h"
+#import "GTLogUtil.h"
 #import "GTStringUtils.h"
 #import "GTSystemConfig.h"
 #import <CommonCrypto/CommonCryptor.h>
@@ -87,6 +88,7 @@
                                                  NULL,
                                                  &_cryptor);
         if (status != kCCSuccess || _cryptor == NULL) {
+            [GTLogUtil e:NSStringFromClass(self.class) msg:@"Create CCCryptor failed!"];
             return nil;
         }
 
@@ -116,6 +118,7 @@
                                                        options:NSDataBase64DecodingIgnoreUnknownCharacters];
     data = [self stripPublicKeyHeader:data];
     if (!data) {
+        [GTLogUtil e:NSStringFromClass(self.class) msg:@"Strip rsa public key header failed!"];
         return;
     }
 
@@ -148,6 +151,7 @@
     SecKeyRef keyRef = nil;
     status = SecItemCopyMatching((__bridge CFDictionaryRef) publicKey, (CFTypeRef *) &keyRef);
     if (status != noErr) {
+        [GTLogUtil e:NSStringFromClass(self.class) msg:@"Add rsa public ket failed!"];
         return;
     }
     _publicKey = keyRef;
@@ -182,6 +186,7 @@
                                    outbuf,
                                    &outlen);
             if (status != 0) {
+                [GTLogUtil e:NSStringFromClass(self.class) msg:@"Encrypt with rsa public key failed!"];
                 break;
             } else {
                 [result appendBytes:outbuf length:outlen];
@@ -226,6 +231,7 @@
         }
     });
     if (!result) {
+        [GTLogUtil e:NSStringFromClass(self.class) msg:@"Encrypt data with aes failed!"];
         return _errorData;
     }
     return result;

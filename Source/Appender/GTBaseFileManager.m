@@ -7,6 +7,7 @@
 //
 
 #import "GTBaseFileManager.h"
+#import "GTLogUtil.h"
 #import "GTLoggerConstants.h"
 
 #define kFileManagerLockName @"com.getui.log.file.manager.lock"
@@ -56,9 +57,7 @@
             _fileSize += data.length;
         }
         @catch (NSException *exception) {
-            if (SYSTEM_DEBUG_MODE) {
-                //NSLog(@"%@", exception);
-            }
+            [GTLogUtil e:NSStringFromClass(self.class) msg:exception.description];
         }
         @finally {
             [self.lock unlock];

@@ -7,18 +7,19 @@
 //
 
 #import "GTAppenderManager.h"
+#import "GTAppenderOperation.h"
 #import "GTBaseAppender.h"
-#import "GTMutableDictionary.h"
-#import "GTLoggerFactory.h"
 #import "GTBaseLogEvent.h"
 #import "GTBinaryLayout.h"
-#import "GTLogFileMeta.h"
-#import "GTAppenderOperation.h"
-#import "GTDateTimeUtil.h"
-#import "GTLoggerConstants.h"
-#import "GTLogStorage.h"
 #import "GTDatabaseManager.h"
+#import "GTDateTimeUtil.h"
+#import "GTLogFileMeta.h"
+#import "GTLogStorage.h"
+#import "GTLogUtil.h"
+#import "GTLoggerConstants.h"
+#import "GTLoggerFactory.h"
 #import "GTLruCache.h"
+#import "GTMutableDictionary.h"
 
 #define kAppenderQueueName @"com.getui.log.appender.queue"
 #define kLogFileNameTemplate @"%@-%@-%@-%d.bin"
@@ -75,6 +76,7 @@
 }
 
 + (void)readCache {
+    [GTLogUtil i:NSStringFromClass(self.class) msg:@"Will read cached log event!"];
     GTAppenderManager *manager = [GTAppenderManager manager];
     NSDictionary *dictionary = [manager.logEventCache values];
     [dictionary enumerateKeysAndObjectsUsingBlock:^(id _Nonnull key, id _Nonnull obj, BOOL *_Nonnull stop) {

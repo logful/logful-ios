@@ -16,6 +16,8 @@
 		531411A11B9BCE1D00BCD867 /* GTDeviceID.m in Sources */ = {isa = PBXBuildFile; fileRef = 5314119F1B9BCE1D00BCD867 /* GTDeviceID.m */; };
 		531411AC1B9C0D3300BCD867 /* GTUncaughtExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 531411AA1B9C0D3300BCD867 /* GTUncaughtExceptionHandler.h */; };
 		531411AD1B9C0D3300BCD867 /* GTUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 531411AB1B9C0D3300BCD867 /* GTUncaughtExceptionHandler.m */; };
+		53175CB41C2D06870017DF50 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 532112A11BCE55260081F01D /* libz.tbd */; };
+		53175CB51C2D068C0017DF50 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5340EFE51C2A5C1600EE853A /* libsqlite3.tbd */; };
 		5321129C1BCE54310081F01D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5321129B1BCE54310081F01D /* SystemConfiguration.framework */; };
 		532346D01B967F7200915861 /* GTScheduleTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 532346CE1B967F7200915861 /* GTScheduleTask.h */; };
 		532346D11B967F7200915861 /* GTScheduleTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 532346CF1B967F7200915861 /* GTScheduleTask.m */; };
@@ -45,8 +47,6 @@
 		533066281B93E5DB008D5D86 /* GTGzipTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 533066261B93E5DB008D5D86 /* GTGzipTool.m */; };
 		5330662B1B93E5FD008D5D86 /* GTChecksum.h in Headers */ = {isa = PBXBuildFile; fileRef = 533066291B93E5FD008D5D86 /* GTChecksum.h */; };
 		5330662C1B93E5FD008D5D86 /* GTChecksum.m in Sources */ = {isa = PBXBuildFile; fileRef = 5330662A1B93E5FD008D5D86 /* GTChecksum.m */; };
-		5340F01C1C2B90B300EE853A /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 532112A11BCE55260081F01D /* libz.tbd */; };
-		5340F01D1C2B90B700EE853A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5340EFE51C2A5C1600EE853A /* libsqlite3.tbd */; };
 		5340F02F1C2BBF3D00EE853A /* GTLogUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 5340F02D1C2BBF3D00EE853A /* GTLogUtil.h */; };
 		5340F0301C2BBF3D00EE853A /* GTLogUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 5340F02E1C2BBF3D00EE853A /* GTLogUtil.m */; };
 		534A1C641B8F07A600E43BD8 /* GTStringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 534A1C621B8F07A600E43BD8 /* GTStringUtils.h */; };
@@ -277,8 +277,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5340F01D1C2B90B700EE853A /* libsqlite3.tbd in Frameworks */,
-				5340F01C1C2B90B300EE853A /* libz.tbd in Frameworks */,
+				53175CB51C2D068C0017DF50 /* libsqlite3.tbd in Frameworks */,
+				53175CB41C2D06870017DF50 /* libz.tbd in Frameworks */,
 				5321129C1BCE54310081F01D /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,6 +10,7 @@
 #import "GTCryptoTool.h"
 #import "GTDateTimeUtil.h"
 #import "GTDeviceID.h"
+#import "GTLogUtil.h"
 #import "GTLoggerConstants.h"
 #import "GTLoggerFactory.h"
 #import "GTScheduleManager.h"
@@ -25,6 +26,7 @@
 @property (nonatomic, assign) int64_t authorizationTime;
 @property (nonatomic, assign) int64_t expiresIn;
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
+@property (nonatomic, strong) GTServerConfig *config;
 
 @end
 
@@ -37,6 +39,11 @@
         service = [[self alloc] init];
     });
     return service;
+}
+
++ (BOOL)granted {
+    GTClientUserInitService *service = [GTClientUserInitService service];
+    return service.config != nil && [service _authenticated] && [service.config granted];
 }
 
 + (BOOL)authenticated {
@@ -97,17 +104,26 @@
                                                                                               options:kNilOptions
                                                                                                 error:&error];
                                    if (!error) {
+                                       [GTLogUtil i:NSStringFromClass(self.class) msg:dictionary.description];
                                        @try {
                                            _accessToken = [dictionary objectForKey:@"access_token"];
                                            _tokenType = [dictionary objectForKey:@"token_type"];
                                            _expiresIn = [[dictionary objectForKey:@"expires_in"] longValue];
                                            _authorizationTime = [GTDateTimeUtil currentTimeMillis];
                                            [GTCryptoTool addPublicKey:[dictionary objectForKey:@"public_key"]];
+                                           [GTLogUtil i:NSStringFromClass(self.class) msg:@"Client user authenticate successful!"];
                                            [self sendUserReport];
                                        }
                                        @catch (NSException *exception) {
-                                           // Ignore exception
+                                           [GTLogUtil e:NSStringFromClass(self.class) msg:exception.description];
                                        }
+                                   }
+                               } else {
+                                   if (connectionError) {
+                                       [GTLogUtil e:NSStringFromClass(self.class) msg:nil err:connectionError];
+                                   }
+                                   if (httpResponse.statusCode == 401) {
+                                       [GTLogUtil e:NSStringFromClass(self.class) msg:@"Client user authenticate failed, please check your key and secret!"];
                                    }
                                }
                            }];
@@ -130,6 +146,7 @@
 
     NSData *chunk = [GTCryptoTool encryptAES:[self userInformation]];
     if (!chunk) {
+        [GTLogUtil e:NSStringFromClass(self.class) msg:@"Encrypt user report information failed!"];
         return;
     }
 
@@ -162,7 +179,15 @@
                                                                                               options:kNilOptions
                                                                                                 error:&error];
                                    if (!error) {
+                                       [GTLogUtil i:NSStringFromClass(self.class) msg:dictionary.description];
                                        [self impServerConfig:[[GTServerConfig alloc] initWithAttr:dictionary]];
+                                   }
+                               } else {
+                                   if (connectionError) {
+                                       [GTLogUtil e:NSStringFromClass(self.class) msg:nil err:connectionError];
+                                   }
+                                   if (httpResponse.statusCode != 200) {
+                                       [GTLogUtil e:NSStringFromClass(self.class) msg:@"Upload user information report failed!"];
                                    }
                                }
                            }];
@@ -181,6 +206,7 @@
         @"appId" : [[NSBundle mainBundle] bundleIdentifier],
         @"version" : infoDictionary[@"CFBundleVersion"],
         @"versionString" : infoDictionary[@"CFBundleShortVersionString"],
+        //@"deviceId" : @"",
         @"recordOn" : @([GTLoggerFactory isOn])
     };
 
@@ -194,11 +220,15 @@
 }
 
 - (void)impServerConfig:(GTServerConfig *)config {
+    [GTLogUtil i:NSStringFromClass(self.class) msg:@"Read server config successful!"];
     if (config == nil) {
         return;
     }
 
+    _config = config;
+
     if (!config.granted) {
+        [GTLogUtil i:NSStringFromClass(self.class) msg:@"Client user not allow to upload log file!"];
         return;
     }
 

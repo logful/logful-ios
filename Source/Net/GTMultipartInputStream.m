@@ -20,8 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GTLogUtil.h"
 #import "GTMultipartInputStream.h"
 #import <UIKit/UIKit.h>
+
 #define kHeaderStringFormat @"--%@\r\nContent-Disposition: form-data; name=\"%@\"\r\n\r\n"
 #define kHeaderDataFormat @"--%@\r\nContent-Disposition: form-data; name=\"%@\"\r\nContent-Type: %@\r\n\r\n"
 #define kHeaderPathFormat @"--%@\r\nContent-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\nContent-Type: %@\r\n\r\n"
@@ -85,7 +87,11 @@ static NSString *MIMETypeForExtension(NSString *extension) {
     self.headers = [[NSString stringWithFormat:kHeaderPathFormat, boundary, name, filename, MIMETypeForExtension(path.pathExtension)] dataUsingEncoding:NSUTF8StringEncoding];
     self.headersLength = [self.headers length];
     self.body = [NSInputStream inputStreamWithFileAtPath:path];
-    self.bodyLength = [[[[NSFileManager defaultManager] attributesOfItemAtPath:path error:NULL] objectForKey:NSFileSize] unsignedIntegerValue];
+    NSError *error;
+    self.bodyLength = [[[[NSFileManager defaultManager] attributesOfItemAtPath:path error:&error] objectForKey:NSFileSize] unsignedIntegerValue];
+    if (error) {
+        [GTLogUtil e:NSStringFromClass(self.class) msg:nil err:error];
+    }
     [self updateLength];
     return self;
 }
@@ -181,6 +187,7 @@ static NSString *MIMETypeForExtension(NSString *extension) {
     [self updateLength];
 }
 - (NSInteger)read:(uint8_t *)buffer maxLength:(NSUInteger)len {
+    // FIXME fix NSRangeException
     NSUInteger sent = 0, read;
 
     self.status = NSStreamStatusReading;
