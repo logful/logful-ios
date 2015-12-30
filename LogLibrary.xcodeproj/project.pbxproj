@@ -128,6 +128,8 @@
 		53F020A51B71BED100CBA738 /* LogLibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F020A41B71BED100CBA738 /* LogLibraryTests.m */; };
 		53FD0F951C22649A00C14971 /* GTClientUserInitService.h in Headers */ = {isa = PBXBuildFile; fileRef = 53FD0F931C22649A00C14971 /* GTClientUserInitService.h */; };
 		53FD0F961C22649A00C14971 /* GTClientUserInitService.m in Sources */ = {isa = PBXBuildFile; fileRef = 53FD0F941C22649A00C14971 /* GTClientUserInitService.m */; };
+		D3D026991C33721B00BF4557 /* GTParsePassThroughData.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D026971C33721B00BF4557 /* GTParsePassThroughData.h */; };
+		D3D0269A1C33721B00BF4557 /* GTParsePassThroughData.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D026981C33721B00BF4557 /* GTParsePassThroughData.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -266,6 +268,8 @@
 		53F020A41B71BED100CBA738 /* LogLibraryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogLibraryTests.m; sourceTree = "<group>"; };
 		53FD0F931C22649A00C14971 /* GTClientUserInitService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTClientUserInitService.h; sourceTree = "<group>"; };
 		53FD0F941C22649A00C14971 /* GTClientUserInitService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTClientUserInitService.m; sourceTree = "<group>"; };
+		D3D026971C33721B00BF4557 /* GTParsePassThroughData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTParsePassThroughData.h; sourceTree = "<group>"; };
+		D3D026981C33721B00BF4557 /* GTParsePassThroughData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTParsePassThroughData.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -472,6 +476,8 @@
 				5363CC5D1BD0A30D000A6170 /* GTLruCache.m */,
 				532926391BD5D298000C9C2B /* GTUniqueSequenceTool.h */,
 				5329263A1BD5D298000C9C2B /* GTUniqueSequenceTool.m */,
+				D3D026971C33721B00BF4557 /* GTParsePassThroughData.h */,
+				D3D026981C33721B00BF4557 /* GTParsePassThroughData.m */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -594,6 +600,7 @@
 				5329263B1BD5D298000C9C2B /* GTUniqueSequenceTool.h in Headers */,
 				53BD7F4D1B8D6D6800579957 /* GTLayout.h in Headers */,
 				531411A01B9BCE1D00BCD867 /* GTDeviceID.h in Headers */,
+				D3D026991C33721B00BF4557 /* GTParsePassThroughData.h in Headers */,
 				53BD7F471B8D6D6800579957 /* GTLoggerConstants.h in Headers */,
 				532346D01B967F7200915861 /* GTScheduleTask.h in Headers */,
 				5340F02F1C2BBF3D00EE853A /* GTLogUtil.h in Headers */,
@@ -745,6 +752,7 @@
 				53BD7F231B8D6D6800579957 /* GTAppenderManager.m in Sources */,
 				5340F0301C2BBF3D00EE853A /* GTLogUtil.m in Sources */,
 				53BD7F371B8D6D6800579957 /* GTBaseLogger.m in Sources */,
+				D3D0269A1C33721B00BF4557 /* GTParsePassThroughData.m in Sources */,
 				536F380F1B9422E900596150 /* GTLogStorage.m in Sources */,
 				531411A11B9BCE1D00BCD867 /* GTDeviceID.m in Sources */,
 				53BD7F561B8D6D6800579957 /* GTDateTimeUtil.m in Sources */,
