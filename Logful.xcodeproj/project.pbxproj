@@ -34,7 +34,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		53EF3B381BF31F85006BEE22 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53EF3B371BF31F85006BEE22 /* openssl.framework */; };
 		53EF3B391BF31FE5006BEE22 /* Logful.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 53EF3AB71BF31F7A006BEE22 /* Logful.h */; };
 		53EF3BB81BF31FFC006BEE22 /* GTBaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 53EF3B3B1BF31FFC006BEE22 /* GTBaseLogger.m */; };
 		53EF3BB91BF31FFC006BEE22 /* GTLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 53EF3B3E1BF31FFC006BEE22 /* GTLogger.m */; };
@@ -136,7 +135,6 @@
 		531F50C91BB0E6C700FBBFCD /* libLogful.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLogful.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		53EF3AB71BF31F7A006BEE22 /* Logful.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logful.h; sourceTree = "<group>"; };
 		53EF3AB81BF31F7A006BEE22 /* Logful.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Logful.m; sourceTree = "<group>"; };
-		53EF3B371BF31F85006BEE22 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = openssl.framework; path = Framework/openssl.framework; sourceTree = "<group>"; };
 		53EF3B3A1BF31FFC006BEE22 /* GTBaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTBaseLogger.h; sourceTree = "<group>"; };
 		53EF3B3B1BF31FFC006BEE22 /* GTBaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTBaseLogger.m; sourceTree = "<group>"; };
 		53EF3B3C1BF31FFC006BEE22 /* GTConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTConstants.h; sourceTree = "<group>"; };
@@ -257,7 +255,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53EF3B381BF31F85006BEE22 /* openssl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,7 +265,6 @@
 			isa = PBXGroup;
 			children = (
 				53EF3BB71BF31FFC006BEE22 /* Source */,
-				53EF3B371BF31F85006BEE22 /* openssl.framework */,
 				53EF3AB61BF31F7A006BEE22 /* Logful */,
 				531F50CA1BB0E6C700FBBFCD /* Products */,
 			);

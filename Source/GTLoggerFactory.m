@@ -219,38 +219,38 @@ void GLOG_FATAL_CAPTURE(NSString *tag, NSString *msg) {
 }
 
 - (void)initSystem {
-
+    
     [_lock lock];
-
+    
     if (_initialized) {
         [_lock unlock];
         return;
     }
-
+    
     _loggerCache = [[GTMutableDictionary alloc] init];
-
+    
     // Init log system storage.
     [GTLogStorage initStorage];
-
+    
     // Read system config file.
     [GTSystemConfig read];
-
+    
     // Init database.
     [GTDatabaseManager manager];
-
+    
     // Catch uncaught exception.
     if (_config.caughtException) {
         SetUncaughtExceptionHandler();
     }
-
+    
     [GTClientUserInitService authenticate];
-
+    
     _initialized = YES;
-
+    
     if ([GTSystemConfig isON]) {
         [GTAppenderManager readCache];
     }
-
+    
     [_lock unlock];
 }
 
@@ -292,3 +292,4 @@ void GLOG_FATAL_CAPTURE(NSString *tag, NSString *msg) {
 }
 
 @end
+

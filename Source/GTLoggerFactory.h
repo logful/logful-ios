@@ -242,3 +242,4 @@ void GLOG_FATAL(NSString *tag, NSString *msg);
 void GLOG_FATAL_CAPTURE(NSString *tag, NSString *msg);
 
 @end
+
