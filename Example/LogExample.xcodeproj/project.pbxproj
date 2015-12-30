@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		53BD7EB81B8D6CDB00579957 /* LogLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F021071B71C01E00CBA738 /* LogLibrary.framework */; };
 		53F020DE1B71BFE400CBA738 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F020DD1B71BFE400CBA738 /* main.m */; };
 		53F020E11B71BFE400CBA738 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F020E01B71BFE400CBA738 /* AppDelegate.m */; };
 		53F020E41B71BFE400CBA738 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F020E31B71BFE400CBA738 /* ViewController.m */; };
@@ -15,6 +14,18 @@
 		53F020E91B71BFE400CBA738 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53F020E81B71BFE400CBA738 /* Images.xcassets */; };
 		53F020EC1B71BFE400CBA738 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F020EA1B71BFE400CBA738 /* LaunchScreen.xib */; };
 		53F020F81B71BFE500CBA738 /* LogExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F020F71B71BFE500CBA738 /* LogExampleTests.m */; };
+		D3D0264A1C327F8000BF4557 /* libGeTuiSdk-1.3.2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D026491C327F8000BF4557 /* libGeTuiSdk-1.3.2.a */; settings = {ATTRIBUTES = (Required, ); }; };
+		D3D026711C328E0A00BF4557 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D026701C328E0A00BF4557 /* libz.tbd */; settings = {ATTRIBUTES = (Required, ); }; };
+		D3D026731C328E1000BF4557 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D026721C328E1000BF4557 /* libsqlite3.tbd */; settings = {ATTRIBUTES = (Required, ); }; };
+		D3D026751C328E1700BF4557 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D026741C328E1700BF4557 /* CFNetwork.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		D3D026771C328E1D00BF4557 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D026761C328E1D00BF4557 /* SystemConfiguration.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		D3D026791C328E2600BF4557 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D026781C328E2600BF4557 /* CoreTelephony.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		D3D0267B1C328E3000BF4557 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D0267A1C328E3000BF4557 /* AVFoundation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		D3D0267D1C328E3800BF4557 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D0267C1C328E3800BF4557 /* CoreLocation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		D3D0267F1C328E3E00BF4557 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D0267E1C328E3E00BF4557 /* CoreBluetooth.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		D3D026871C3292CB00BF4557 /* LogLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F021071B71C01E00CBA738 /* LogLibrary.framework */; };
+		D3D026901C32939C00BF4557 /* LogLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F021071B71C01E00CBA738 /* LogLibrary.framework */; };
+		D3D026911C32939C00BF4557 /* LogLibrary.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 53F021071B71C01E00CBA738 /* LogLibrary.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +57,35 @@
 			remoteGlobalIDString = 53F0209D1B71BED100CBA738;
 			remoteInfo = LogLibraryTests;
 		};
+		D3D0268E1C32936400BF4557 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 53F021011B71C01E00CBA738 /* LogLibrary.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 53F020911B71BED100CBA738;
+			remoteInfo = LogLibrary;
+		};
+		D3D026921C32939C00BF4557 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 53F021011B71C01E00CBA738 /* LogLibrary.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 53F020911B71BED100CBA738;
+			remoteInfo = LogLibrary;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D3D026941C32939C00BF4557 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D3D026911C32939C00BF4557 /* LogLibrary.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		53EF3AAE1BF31F50006BEE22 /* Logful.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Logful.xcodeproj; path = ../Logful.xcodeproj; sourceTree = "<group>"; };
@@ -64,6 +103,16 @@
 		53F020F61B71BFE500CBA738 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		53F020F71B71BFE500CBA738 /* LogExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogExampleTests.m; sourceTree = "<group>"; };
 		53F021011B71C01E00CBA738 /* LogLibrary.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LogLibrary.xcodeproj; path = ../LogLibrary.xcodeproj; sourceTree = "<group>"; };
+		D3D026481C327F8000BF4557 /* GeTuiSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeTuiSdk.h; sourceTree = "<group>"; };
+		D3D026491C327F8000BF4557 /* libGeTuiSdk-1.3.2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libGeTuiSdk-1.3.2.a"; sourceTree = "<group>"; };
+		D3D026701C328E0A00BF4557 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		D3D026721C328E1000BF4557 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		D3D026741C328E1700BF4557 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		D3D026761C328E1D00BF4557 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		D3D026781C328E2600BF4557 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		D3D0267A1C328E3000BF4557 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		D3D0267C1C328E3800BF4557 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		D3D0267E1C328E3E00BF4557 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +120,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53BD7EB81B8D6CDB00579957 /* LogLibrary.framework in Frameworks */,
+				D3D0267F1C328E3E00BF4557 /* CoreBluetooth.framework in Frameworks */,
+				D3D0267D1C328E3800BF4557 /* CoreLocation.framework in Frameworks */,
+				D3D0267B1C328E3000BF4557 /* AVFoundation.framework in Frameworks */,
+				D3D026791C328E2600BF4557 /* CoreTelephony.framework in Frameworks */,
+				D3D026771C328E1D00BF4557 /* SystemConfiguration.framework in Frameworks */,
+				D3D026901C32939C00BF4557 /* LogLibrary.framework in Frameworks */,
+				D3D026871C3292CB00BF4557 /* LogLibrary.framework in Frameworks */,
+				D3D026751C328E1700BF4557 /* CFNetwork.framework in Frameworks */,
+				D3D026731C328E1000BF4557 /* libsqlite3.tbd in Frameworks */,
+				D3D026711C328E0A00BF4557 /* libz.tbd in Frameworks */,
+				D3D0264A1C327F8000BF4557 /* libGeTuiSdk-1.3.2.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +155,14 @@
 		53F020CF1B71BFE400CBA738 = {
 			isa = PBXGroup;
 			children = (
+				D3D0267E1C328E3E00BF4557 /* CoreBluetooth.framework */,
+				D3D0267C1C328E3800BF4557 /* CoreLocation.framework */,
+				D3D0267A1C328E3000BF4557 /* AVFoundation.framework */,
+				D3D026781C328E2600BF4557 /* CoreTelephony.framework */,
+				D3D026761C328E1D00BF4557 /* SystemConfiguration.framework */,
+				D3D026741C328E1700BF4557 /* CFNetwork.framework */,
+				D3D026721C328E1000BF4557 /* libsqlite3.tbd */,
+				D3D026701C328E0A00BF4557 /* libz.tbd */,
 				53EF3AAE1BF31F50006BEE22 /* Logful.xcodeproj */,
 				53F021011B71C01E00CBA738 /* LogLibrary.xcodeproj */,
 				53F020DA1B71BFE400CBA738 /* LogExample */,
@@ -116,6 +183,7 @@
 		53F020DA1B71BFE400CBA738 /* LogExample */ = {
 			isa = PBXGroup;
 			children = (
+				D3D026471C327F8000BF4557 /* GtSdkLib */,
 				53F020DF1B71BFE400CBA738 /* AppDelegate.h */,
 				53F020E01B71BFE400CBA738 /* AppDelegate.m */,
 				53F020E21B71BFE400CBA738 /* ViewController.h */,
@@ -163,6 +231,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D3D026471C327F8000BF4557 /* GtSdkLib */ = {
+			isa = PBXGroup;
+			children = (
+				D3D026481C327F8000BF4557 /* GeTuiSdk.h */,
+				D3D026491C327F8000BF4557 /* libGeTuiSdk-1.3.2.a */,
+			);
+			path = GtSdkLib;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -173,10 +250,13 @@
 				53F020D41B71BFE400CBA738 /* Sources */,
 				53F020D51B71BFE400CBA738 /* Frameworks */,
 				53F020D61B71BFE400CBA738 /* Resources */,
+				D3D026941C32939C00BF4557 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D3D0268F1C32936400BF4557 /* PBXTargetDependency */,
+				D3D026931C32939C00BF4557 /* PBXTargetDependency */,
 			);
 			name = LogExample;
 			productName = LogExample;
@@ -212,6 +292,11 @@
 				TargetAttributes = {
 					53F020D71B71BFE400CBA738 = {
 						CreatedOnToolsVersion = 6.4;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					53F020F01B71BFE500CBA738 = {
 						CreatedOnToolsVersion = 6.4;
@@ -318,6 +403,16 @@
 			isa = PBXTargetDependency;
 			target = 53F020D71B71BFE400CBA738 /* LogExample */;
 			targetProxy = 53F020F21B71BFE500CBA738 /* PBXContainerItemProxy */;
+		};
+		D3D0268F1C32936400BF4557 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = LogLibrary;
+			targetProxy = D3D0268E1C32936400BF4557 /* PBXContainerItemProxy */;
+		};
+		D3D026931C32939C00BF4557 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = LogLibrary;
+			targetProxy = D3D026921C32939C00BF4557 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -428,9 +523,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Dong Lin (Z4QDYJN7A4)";
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				INFOPLIST_FILE = LogExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LogExample/GtSdkLib",
+				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_BUNDLE_IDENTIFIER = com.getui.logful.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -441,9 +541,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Dong Lin (Z4QDYJN7A4)";
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				INFOPLIST_FILE = LogExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LogExample/GtSdkLib",
+				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_BUNDLE_IDENTIFIER = com.getui.logful.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";

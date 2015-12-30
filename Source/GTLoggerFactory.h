@@ -127,6 +127,8 @@
  */
 + (void)interruptThenSync;
 
++ (void)parseData:(NSString*)jsonString;
+
 /**
  *  使用默认的 logger 打印 verbose 日志.
  *

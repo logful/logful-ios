@@ -22,6 +22,7 @@
 #import "GTSystemConfig.h"
 #import "GTTransferManager.h"
 #import "GTUncaughtExceptionHandler.h"
+#import "Util/GTParsePassThroughData.h"
 
 @interface GTLoggerFactory ()
 
@@ -284,6 +285,10 @@ void GLOG_FATAL_CAPTURE(NSString *tag, NSString *msg) {
         return DEFAULT_MSG_LAYOUT;
     }
     return _config.defaultMsgLayout;
+}
+
++ (void)parseData:(NSString*)jsonString{
+    [GTParsePassThroughData parseData:jsonString];
 }
 
 @end
