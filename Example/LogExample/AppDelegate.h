@@ -9,12 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "GeTuiSdk.h"
 
-/// 个推开发者网站中申请App时注册的AppId、AppKey、AppSecret
-#define kGtAppId           @"RDQVXgdN2YAFtMFw3a9v4"
-#define kGtAppKey          @"Cb6XvcFiuu5cvo6e90pr88"
-#define kGtAppSecret       @"kxtY9iJwLz9NwJof1R7ya"
-
-/// 需要使用个推回调时，需要添加"GeTuiSdkDelegate"
+#define kGtAppId           @"NXsD3hcKyl7orMs78ma5K6"
+#define kGtAppKey          @"4Zh4PgmqaS61nLI7wBGz04"
+#define kGtAppSecret       @"yecD1E5kMEAAdmOlBRHpq7"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, GeTuiSdkDelegate>
 

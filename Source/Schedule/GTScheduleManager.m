@@ -6,25 +6,32 @@
 //  Copyright (c) 2015年 getui. All rights reserved.
 //
 
-#import "GTScheduleManager.h"
-#import "GTMutableDictionary.h"
-#import "GTLoggerFactory.h"
-#import "GTLoggerConfigurator.h"
-#import "GTRefreshScheduleTask.h"
-#import "GTUploadScheduleTask.h"
+#import "GTAppenderManager.h"
 #import "GTClearScheduleTask.h"
+#import "GTDateTimeUtil.h"
+#import "GTLogUtil.h"
+#import "GTLoggerConfigurator.h"
+#import "GTLoggerFactory.h"
+#import "GTMutableDictionary.h"
+#import "GTRefreshScheduleTask.h"
+#import "GTScheduleManager.h"
+#import "GTTransferManager.h"
+#import "GTUploadScheduleTask.h"
 
 @interface GTScheduleManager ()
 
 @property (nonatomic, strong) GTMutableDictionary *scheduleDictionary;
-@property (nonatomic, strong) dispatch_queue_t taskQueue;
+@property (nonatomic, strong) dispatch_queue_t queue;
 @property (nonatomic, strong) dispatch_source_t timer;
+@property (nonatomic, assign) int64_t startTime;
+@property (nonatomic, assign) int64_t interval;
+@property (nonatomic, assign) BOOL interrupt;
 
 @end
 
 @implementation GTScheduleManager
 
-+ (id)manager {
++ (instancetype)manager {
     static GTScheduleManager *manager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -33,73 +40,67 @@
     return manager;
 }
 
-+ (void)schedule {
++ (void)schedule:(int64_t)frequency interrupt:(BOOL)interrupt interval:(int64_t)interval {
+    [[GTScheduleManager manager] _schedule:frequency interrupt:interrupt interval:interval];
+}
+
++ (void)cancel {
     GTScheduleManager *manager = [GTScheduleManager manager];
-    [manager configScheduleTask];
-    [manager startSchedule];
-}
-
-+ (void)scheduleWithTime:(int64_t)scheduleTime {
-    // TODO
-}
-
-+ (void)scheduleWithArray:(NSString *)scheduleArray {
-    // TODO
+    if (manager.timer) {
+        dispatch_source_cancel(manager.timer);
+    }
 }
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.scheduleDictionary = [[GTMutableDictionary alloc] init];
+        self.queue = dispatch_queue_create("com.getui.log.schedule.manager.task", NULL);
     }
     return self;
 }
 
-- (void)configScheduleTask {
-    GTRefreshScheduleTask *refreshTask = [[GTRefreshScheduleTask alloc] initWithName:@"Refresh"];
-    [self.scheduleDictionary setObject:refreshTask forKey:[refreshTask getName]];
-
-    GTUploadScheduleTask *uploadTask = [[GTUploadScheduleTask alloc] initWithName:@"Upload"];
-    [self.scheduleDictionary setObject:uploadTask forKey:[uploadTask getName]];
-
-    GTClearScheduleTask *clearTask = [[GTClearScheduleTask alloc] initWithName:@"Clear"];
-    [self.scheduleDictionary setObject:clearTask forKey:[clearTask getName]];
-}
-
-- (void)startSchedule {
-    GTLoggerConfigurator *config = [GTLoggerFactory config];
-    if (config == nil) {
-        return;
-    }
-
-    // Create task excute queue.
-    self.taskQueue = dispatch_queue_create("com.getui.log.schedule.manager.task", NULL);
-
-    // Create schedule timer.
-    uint64_t interval = config.updateSystemFrequency * NSEC_PER_SEC;
-    dispatch_queue_t queue = dispatch_queue_create("com.getui.log.schedule.manager.timer", NULL);
-    self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-    dispatch_source_set_timer(_timer, dispatch_time(DISPATCH_TIME_NOW, 0), interval, 0);
-
+- (void)_schedule:(int64_t)frequency interrupt:(BOOL)interrupt interval:(int64_t)interval {
+    _interrupt = interrupt;
+    _interval = interval;
     __weak GTScheduleManager *weak = self;
-    dispatch_source_set_event_handler(self.timer, ^() {
-        [weak executeScheduleTask];
-    });
+    [GTLogUtil d:NSStringFromClass(self.class) msg:[NSString stringWithFormat:@"Schedule task every %lld seconds.", frequency]];
+    if (!_timer) {
+        _timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, _queue);
+        dispatch_source_set_event_handler(_timer, ^{
+            [weak schuduleEvent];
+        });
+        dispatch_source_set_cancel_handler(_timer, ^{
+            _timer = nil;
+            [GTLogUtil d:NSStringFromClass(self.class) msg:@"Schedule timer canceled!"];
+        });
+        dispatch_source_set_timer(_timer, dispatch_time(DISPATCH_TIME_NOW, 0), frequency * NSEC_PER_SEC, 0);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), _queue, ^{
+            dispatch_resume(_timer);
+        });
+    } else {
+        dispatch_source_set_timer(_timer, dispatch_time(DISPATCH_TIME_NOW, 0), frequency * NSEC_PER_SEC, 0);
+    }
+    _startTime = [GTDateTimeUtil currentTimeMillis] / 1000;
 
-    // Delay trigger timer.
-    dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC));
-    dispatch_after(delay, dispatch_get_main_queue(), ^{
-        dispatch_resume(weak.timer);
-    });
-}
-
-- (void)executeScheduleTask {
-    for (NSString *key in _scheduleDictionary.allKeys) {
-        GTScheduleTask *task = [_scheduleDictionary objectForKey:key];
-        dispatch_async(_taskQueue, ^{
-            [task execute];
+    if (interval != 0) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(interval * NSEC_PER_SEC)), _queue, ^{
+            if ([GTDateTimeUtil currentTimeMillis] / 1000 - _startTime >= _interval) {
+                if (weak.timer) {
+                    dispatch_source_cancel(weak.timer);
+                }
+            }
         });
     }
+}
+
+- (void)schuduleEvent {
+    [GTLogUtil d:NSStringFromClass(self.class) msg:@"Schedule task triger!"];
+    if (_interrupt) {
+        [GTAppenderManager interrupt];
+        [GTLogUtil d:NSStringFromClass(self.class) msg:@"Will interrupt all writing log file."];
+    }
+    [GTTransferManager uploadLogFile];
+    [GTTransferManager uploadAttachment];
 }
 
 @end

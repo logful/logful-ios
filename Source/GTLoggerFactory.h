@@ -127,7 +127,12 @@
  */
 + (void)interruptThenSync;
 
-+ (void)parseData:(NSString*)jsonString;
+/**
+ *  Parse push sdk transmission.
+ *
+ *  @param data Transmission data
+ */
++ (void)parseTransmission:(NSString *)data;
 
 /**
  *  使用默认的 logger 打印 verbose 日志.
@@ -242,4 +247,3 @@ void GLOG_FATAL(NSString *tag, NSString *msg);
 void GLOG_FATAL_CAPTURE(NSString *tag, NSString *msg);
 
 @end
-

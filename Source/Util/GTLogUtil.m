@@ -9,12 +9,12 @@
 #import "GTLogUtil.h"
 #import "GTLoggerFactory.h"
 
-#define DEBUG_TAG @"LOGFUL_DEBUG"
-#define INFO_TAG @"LOGFUL_INFO"
-#define VERBOSE_TAG @"LOGFUL_VERBOSE"
-#define WARN_TAG @"LOGFUL_WARN"
-#define ERROR_TAG @"LOGFUL_ERROR"
-#define FATAL_TAG @"LOGFUL_FATAL"
+#define DEBUG_TAG @"LOGFUL [DEBUG]"
+#define INFO_TAG @"LOGFUL [INFO]"
+#define VERBOSE_TAG @"LOGFUL [VERBOSE]"
+#define WARN_TAG @"LOGFUL [WARN]"
+#define ERROR_TAG @"LOGFUL [ERROR]"
+#define FATAL_TAG @"LOGFUL [FATAL]"
 
 @implementation GTLogUtil
 

@@ -47,7 +47,7 @@ NSString *const UPLOAD_CRASH_REPORT_FILE_URI = @"/log/crash/upload";
 
 NSString *const UPLOAD_ATTACHMENT_FILE_URI = @"/log/attachment/upload";
 
-NSString *const VERSION = @"0.2.1";
+NSString *const VERSION = @"0.3.0";
 
 @implementation GTLoggerConstants
 

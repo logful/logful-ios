@@ -32,7 +32,7 @@
 
 @implementation GTClientUserInitService
 
-+ (id)service {
++ (instancetype)service {
     static GTClientUserInitService *service = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -43,7 +43,7 @@
 
 + (BOOL)granted {
     GTClientUserInitService *service = [GTClientUserInitService service];
-    return service.config != nil && [service _authenticated] && [service.config granted];
+    return [service _authenticated];
 }
 
 + (BOOL)authenticated {
@@ -121,9 +121,9 @@
                                } else {
                                    if (connectionError) {
                                        [GTLogUtil e:NSStringFromClass(self.class) msg:nil err:connectionError];
-                                   }
-                                   if (httpResponse.statusCode == 401) {
-                                       [GTLogUtil e:NSStringFromClass(self.class) msg:@"Client user authenticate failed, please check your key and secret!"];
+                                       if (connectionError.code == NSURLErrorUserCancelledAuthentication) {
+                                           [GTLogUtil e:NSStringFromClass(self.class) msg:@"Client user authenticate failed, please check your key and secret!"];
+                                       }
                                    }
                                }
                            }];
@@ -228,11 +228,9 @@
     _config = config;
 
     if (!config.granted) {
-        [GTLogUtil i:NSStringFromClass(self.class) msg:@"Client user not allow to upload log file!"];
+        //[GTLogUtil i:NSStringFromClass(self.class) msg:@"Client user not allow to upload log file!"];
         return;
     }
-
-    [GTScheduleManager schedule];
     // TODO
 }
 

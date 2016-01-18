@@ -10,8 +10,7 @@
 
 @interface GTScheduleManager : NSObject
 
-+ (void)schedule;
-+ (void)scheduleWithTime:(int64_t)scheduleTime;
-+ (void)scheduleWithArray:(NSString *)scheduleArray;
++ (void)schedule:(int64_t)frequency interrupt:(BOOL)interrupt interval:(int64_t)interval;
++ (void)cancel;
 
 @end

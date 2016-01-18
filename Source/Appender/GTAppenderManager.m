@@ -71,6 +71,7 @@
         GTAppenderOperation *operation = [[GTAppenderOperation alloc] initWithEvent:event];
         [[manager getOperationQueue] addOperation:operation];
     } else {
+        [GTLogUtil d:NSStringFromClass(self.class) msg:@"Logful is turn off, pre log event will be cached."];
         [manager.logEventCache setObject:event forKey:[[NSUUID UUID] UUIDString]];
     }
 }

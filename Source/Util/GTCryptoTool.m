@@ -7,10 +7,10 @@
 //
 
 #import "GTCryptoTool.h"
-#import "GTDeviceID.h"
 #import "GTLogUtil.h"
+#import "GTLoggerFactory.h"
+#import "GTSecurityProvider.h"
 #import "GTStringUtils.h"
-#import "GTSystemConfig.h"
 #import <CommonCrypto/CommonCryptor.h>
 #import <CommonCrypto/CommonKeyDerivation.h>
 #import <Security/Security.h>
@@ -68,13 +68,24 @@
     if (self) {
         self.lock = [[NSRecursiveLock alloc] init];
 
-        NSString *password = [GTSystemConfig appKey];
-        NSString *salt = [GTDeviceID uid];
-        if ([GTStringUtils isEmpty:password] || [GTStringUtils isEmpty:salt]) {
+        GTLoggerConfigurator *config = [GTLoggerFactory config];
+        if (!config) {
             return nil;
         }
-        self.keyData = [self calculateKey:[password dataUsingEncoding:NSUTF8StringEncoding]
-                                     salt:[salt dataUsingEncoding:NSUTF8StringEncoding]];
+        id<GTSecurityProvider> provider = [config securityProvider];
+        if (!provider) {
+            return nil;
+        }
+
+        NSData *password = [provider password];
+        NSData *salt = [provider salt];
+
+        if (!password || !salt) {
+            [GTLogUtil e:NSStringFromClass(self.class) msg:@"Password or salt was nil."];
+            return nil;
+        }
+
+        self.keyData = [self calculateKey:password salt:salt];
 
         if (!self.keyData) {
             return nil;

@@ -14,6 +14,7 @@
 #import "GTDatabaseManager.h"
 #import "GTLogStorage.h"
 #import "GTLogUtil.h"
+#import "GTLogfulConfigurer.h"
 #import "GTLoggerConstants.h"
 #import "GTLoggerFactory.h"
 #import "GTMutableDictionary.h"
@@ -22,7 +23,6 @@
 #import "GTSystemConfig.h"
 #import "GTTransferManager.h"
 #import "GTUncaughtExceptionHandler.h"
-#import "Util/GTParsePassThroughData.h"
 
 @interface GTLoggerFactory ()
 
@@ -46,7 +46,8 @@
 }
 
 + (void)init {
-    GTLoggerConfigurator *config = [GTLoggerConfigurator defaultConfig];
+    GTLoggerConfigurator *config = [GTLoggerConfigurator configWithBlock:^(ConfiguratorBuilder *builder){
+    }];
     [GTLoggerFactory initWithConfig:config];
 }
 
@@ -104,7 +105,7 @@
 + (void)turnOn {
     GTLoggerFactory *factory = [GTLoggerFactory factory];
     if (factory.initialized) {
-        [GTSystemConfig saveStatus:YES];
+        [GTLogfulConfigurer setOn:YES save:YES implement:YES];
         [GTAppenderManager readCache];
     }
 }
@@ -112,13 +113,13 @@
 + (void)turnOff {
     GTLoggerFactory *factory = [GTLoggerFactory factory];
     if (factory.initialized) {
-        [GTSystemConfig saveStatus:NO];
+        [GTLogfulConfigurer setOn:NO save:YES implement:YES];
     }
 }
 
 + (BOOL)isOn {
     GTLoggerFactory *factory = [GTLoggerFactory factory];
-    return factory.initialized && [GTSystemConfig isON];
+    return factory.initialized && [GTLogfulConfigurer isOn];
 }
 
 + (void)sync {
@@ -219,39 +220,40 @@ void GLOG_FATAL_CAPTURE(NSString *tag, NSString *msg) {
 }
 
 - (void)initSystem {
-    
+
     [_lock lock];
-    
+
     if (_initialized) {
         [_lock unlock];
         return;
     }
-    
+
     _loggerCache = [[GTMutableDictionary alloc] init];
-    
+
     // Init log system storage.
     [GTLogStorage initStorage];
-    
-    // Read system config file.
-    [GTSystemConfig read];
-    
+
     // Init database.
     [GTDatabaseManager manager];
-    
+
+    // Read saved config.
+    [GTLogfulConfigurer setFrequency:_config.updateSystemFrequency save:NO implement:YES];
+
     // Catch uncaught exception.
     if (_config.caughtException) {
         SetUncaughtExceptionHandler();
     }
-    
+
+    // Authenticate client user.
     [GTClientUserInitService authenticate];
-    
+
     _initialized = YES;
-    
-    if ([GTSystemConfig isON]) {
+
+    [_lock unlock];
+
+    if ([GTLogfulConfigurer isOn]) {
         [GTAppenderManager readCache];
     }
-    
-    [_lock unlock];
 }
 
 - (GTLogger *)getLogger:(NSString *)loggerName {
@@ -287,9 +289,20 @@ void GLOG_FATAL_CAPTURE(NSString *tag, NSString *msg) {
     return _config.defaultMsgLayout;
 }
 
-+ (void)parseData:(NSString*)jsonString{
-    [GTParsePassThroughData parseData:jsonString];
++ (void)parseTransmission:(NSData *)data {
+    NSError *error;
+    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data
+                                                               options:kNilOptions
+                                                                 error:&error];
+    if (!error) {
+        [GTLogUtil d:NSStringFromClass(self.class) msg:[dictionary description]];
+        id transmission = [dictionary objectForKey:@"logful"];
+        if (transmission) {
+            [GTLogfulConfigurer parse:transmission save:YES implement:YES];
+        }
+    } else {
+        [GTLogUtil e:NSStringFromClass(self.class) msg:@"" err:error];
+    }
 }
 
 @end
-

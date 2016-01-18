@@ -16,11 +16,10 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    GTLoggerConfigurator *config = [GTLoggerConfigurator defaultConfig];
-    config.defaultLoggerName = @"sample";
-    config.defaultMsgLayout = @"e,exception,%s";
-    config.caughtException = NO;
-
+    GTLoggerConfigurator *config = [GTLoggerConfigurator configWithBlock:^(ConfiguratorBuilder *builder) {
+        builder.defaultLoggerName = @"sample";
+        builder.caughtException = NO;
+    }];
     [GTLoggerFactory setApiUrl:@"http://demo.logful.aoapp.com:9600"];
     [GTLoggerFactory setAppKey:@"beed06257195f47de875fa222c636769"];
     [GTLoggerFactory setAppSecret:@"9bd521b5bdc5d5ae3b54380495f10e55"];
@@ -78,15 +77,17 @@
 
     // [4]: 收到个推消息
     NSData *payload = [GeTuiSdk retrivePayloadById:payloadId];
+    [GTLoggerFactory parseTransmission:payload];
+    /*
     NSString *payloadMsg = nil;
     if (payload) {
         payloadMsg = [[NSString alloc] initWithBytes:payload.bytes length:payload.length encoding:NSUTF8StringEncoding];
-        NSLog(@"payloadMsg---%@", payloadMsg);
-        [GTLoggerFactory parseData:payloadMsg];
+        [GTLoggerFactory parseTransmission:payloadMsg];
     }
+     */
 
-    NSString *msg = [NSString stringWithFormat:@" payloadId=%@,taskId=%@,messageId:%@,payloadMsg:%@%@", payloadId, taskId, aMsgId, payloadMsg, offLine ? @"<离线消息>" : @""];
-    NSLog(@"\n>>>[GexinSdk ReceivePayload]:%@\n\n", msg);
+    //NSString *msg = [NSString stringWithFormat:@" payloadId=%@,taskId=%@,messageId:%@,payloadMsg:%@%@", payloadId, taskId, aMsgId, payloadMsg, offLine ? @"<离线消息>" : @""];
+    //NSLog(@"\n>>>[GexinSdk ReceivePayload]:%@\n\n", msg);
 
     /**
      *汇报个推自定义事件

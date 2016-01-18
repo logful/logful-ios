@@ -6,16 +6,40 @@
 //  Copyright (c) 2015年 getui. All rights reserved.
 //
 
+#import "GTSecurityProvider.h"
 #import <Foundation/Foundation.h>
 
-/** 
- * 日志系统初始化参数设置. 
- */
+@class ConfiguratorBuilder;
+
 @interface GTLoggerConfigurator : NSObject
 
+- (unsigned long long)logFileMaxSize;
+- (NSArray *__nonnull)uploadNetworkType;
+- (NSArray *__nonnull)uploadLogLevel;
+- (BOOL)deleteUploadedLogFile;
+- (int64_t)updateSystemFrequency;
+- (NSInteger)activeUploadTask;
+- (NSInteger)activeLogWriter;
+- (BOOL)caughtException;
+- (NSString *__nonnull)defaultLoggerName;
+- (NSString *__nonnull)defaultMsgLayout;
+- (int)screenshotQuality;
+- (float)screenshotScale;
+- (id<GTSecurityProvider> __nonnull)securityProvider;
+
 /**
- * 单个日志文件最大字节数（单位：字节）.
+ *  Build config with block.
+ *
+ *  @param builderBlock Build block
+ *
+ *  @return GTLoggerConfigurator instance
  */
++ (instancetype __nonnull)configWithBlock:(void (^__nonnull)(ConfiguratorBuilder *__nonnull))builderBlock;
+
+@end
+
+@interface ConfiguratorBuilder : NSObject
+
 @property (nonatomic, assign) unsigned long long logFileMaxSize;
 
 /**
@@ -36,7 +60,7 @@
 /**
  * 定时刷新日志系统（单位：秒）.
  */
-@property (nonatomic, assign) NSInteger updateSystemFrequency;
+@property (nonatomic, assign) int64_t updateSystemFrequency;
 
 /**
  * 同时上传文件数量.
@@ -73,11 +97,8 @@
  */
 @property (nonatomic, assign) float screenshotScale;
 
-/**
- *  获取默认配置.
- *
- *  @return 默认配置实例
- */
-+ (GTLoggerConfigurator *__nonnull)defaultConfig;
+@property (nonatomic, strong, nonnull) id<GTSecurityProvider> securityProvider;
+
+- (GTLoggerConfigurator *__nonnull)build;
 
 @end
